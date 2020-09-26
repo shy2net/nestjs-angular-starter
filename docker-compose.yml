@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  web:
+    image: nodejs-angular-starter
+    build:
+      context: .
+      args:
+        - NODE_ENV
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    volumes:
+      - '~/dockers_data/web/logs:/logs'
+  db:
+    image: mongo:latest
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - 'mongodata:/data/db'
+
+volumes:
+  mongodata:

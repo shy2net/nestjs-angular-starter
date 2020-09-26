@@ -1,0 +1,4 @@
+{
+  "DB_URI": "production-mongo-uri",
+  "CLIENT_URL": "http://yourwebsite.com"
+}

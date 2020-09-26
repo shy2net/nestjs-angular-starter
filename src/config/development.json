@@ -1,0 +1,18 @@
+{
+    "DB_URI": "mongodb://root:root@localhost:27017/?authSource=admin",
+    "CLIENT_URL": "http://localhost:4200",
+    "JWT": {
+        "SECRET": "T{qVK:zv:4[y'GMPvRBkA3>!BP$C5hnakvZP[f=['.f]Lg9SUJ*Y{:b*G4`3^S/C"
+    },
+    "SOCIAL_CREDENTIALS": {
+        "facebook": {
+            "APP_ID": 223045385190067,
+            "APP_SECRET": "99f023bf540a03481d24d496ecbe250e"
+        },
+        "google": {
+            "APP_ID": "1086867360709-69ko7vlgcc3uuq8a42dmmvgjng1vg02l.apps.googleusercontent.com",
+            "APP_SECRET": "VCj6R9XOnro6I8sRfFBS19pr"
+        }
+    },
+    "LOG_LEVEL": "debug"
+}

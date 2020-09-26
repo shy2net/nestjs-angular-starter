@@ -1,0 +1,29 @@
+@api = http://localhost:3000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6W10sIl9pZCI6IjVmNmUxMWY0M2Q4NWFkYzZhMjY4OThjZSIsImVtYWlsIjoiam9obm55QGJyYXZvLmNvbSIsImZpcnN0TmFtZSI6IkpvaG5ueSIsImxhc3ROYW1lIjoiQnJhdm8iLCJfX3YiOjAsImlhdCI6MTYwMTA0OTA5M30.ekaqSEkw1RAma73fByKyCd4NoeaeW8qzyQ2pvyffvLM
+
+### Test API
+GET {{api}}/test
+
+### Test login
+POST {{api}}/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "johnny@bravo.com",
+    "password": "mypass"
+}
+
+### Get user profile
+GET {{api}}/profile HTTP/1.1
+Authorization: Bearer {{token}}
+
+### Register an example user
+POST {{api}}/register HTTP/1.1
+content-type: application/json
+
+{
+    "email":"johnny@bravo.com",
+    "password": "mypass",
+    "firstName": "Johnny",
+    "lastName": "Bravo"
+}
