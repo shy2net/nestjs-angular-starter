@@ -25,11 +25,11 @@ RUN echo "NODE_ENV for build was set to: ${NODE_ENV}, starting build..." \
 COPY ./package.json ./package.json
 COPY ./angular-src/package.json ./angular-src/package.json
 
-# Copy the node_modules installation script
-COPY ./install_all.sh ./install_all.sh
+# Copy the scripts directory
+COPY ./scripts ./scripts
 
-# Install all dependencies using the script
-RUN chmod +x ./install_all.sh && npm run install:all
+# Give permissions to all of the scripts, and install all dependencies using the script
+RUN chmod +x ./scripts/* && npm run install:all
 
 # Copy all of the required leftover-files
 COPY . .
