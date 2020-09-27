@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      Login
+    </div>
+    <div class="card-body">
+      <form name="loginForm" #loginForm="ngForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input name="email" type="email" class="form-control" [(ngModel)]="email" id="email"
+            aria-describedby="emailHelp" placeholder="Enter email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input name="password" type="password" class="form-control" id="password" [(ngModel)]="password"
+            placeholder="Password" required>
+          <small id="passwordHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+
+        <hr>
+        <div class="card-block">
+          <button id="login_btn" type="submit" class="btn btn-primary" [disabled]="!loginForm.valid"
+            (click)="onLoginClick()">Login</button>
+
+          <app-social-login-button>
+
+          </app-social-login-button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>

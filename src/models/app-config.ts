@@ -1,5 +1,6 @@
-import * as cors from 'cors';
 import * as jwt from 'jsonwebtoken';
+
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 export interface AppConfig {
   ENVIRONMENT: string;
@@ -16,7 +17,7 @@ export interface AppConfig {
     CA: string;
   };
   SOCIAL_CREDENTIALS: unknown;
-  CORS_OPTIONS: cors.CorsOptions;
+  CORS_OPTIONS: CorsOptions;
   LOGS_DIR: string;
   LOG_LEVEL: 'debug' | 'info';
   USE_SSR: boolean;

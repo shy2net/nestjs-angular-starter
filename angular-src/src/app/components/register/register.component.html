@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">Register a new user</div>
+    <div class="card-body">
+      <form #form="ngForm" class="col-12 form" [appFormValidator]="userProfile" [appFormValidatorForce]="true"
+        (appFormValidatorIsFormValidChange)="onFormValidChange($event)">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" name="email" [(ngModel)]="userProfile.email" id="email"
+                  aria-describedby="helpId" placeholder="mail@gmail.com">
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" [(ngModel)]="userProfile.password"
+                  id="password" aria-describedby="helpId" placeholder="Password">
+              </div>
+
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="firstName">First name:</label>
+                <input type="text" class="form-control" name="firstName" [(ngModel)]="userProfile.firstName"
+                  id="firstName" aria-describedby="helpId" placeholder="">
+              </div>
+
+              <div class="form-group">
+                <label for="lastName">Last name:</label>
+                <input type="text" class="form-control" name="lastName" [(ngModel)]="userProfile.lastName" id="lastName"
+                  aria-describedby="helpId" placeholder="">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <button type="submit" [disabled]="!isFormValid" class="btn btn-primary mt-2"
+                (click)="onRegisterClick()">Register</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

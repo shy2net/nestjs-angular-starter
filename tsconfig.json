@@ -11,5 +11,15 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true
-  }
+  },
+  "exclude": [
+    /*
+    Because we want to allow intellisense on tests, we don't exclude any test files (*.spec.ts).
+    Instead we only on build using tsconfig.prod.json in order exclude the test files.
+    */
+    "angular-src",
+    "src/tests",
+    "node_modules",
+    "dist"
+  ]
 }

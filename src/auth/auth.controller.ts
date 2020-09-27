@@ -48,6 +48,12 @@ export class AuthController {
   }
 
   @UseGuards(UserAuthGuard)
+  @Get('/logout')
+  logout(): void {
+    // TODO: Perform your own logout logic (blacklisting token, etc)
+  }
+
+  @UseGuards(UserAuthGuard)
   @Roles('admin')
   @Get('/admin')
   admin(): string {
