@@ -1,8 +1,11 @@
+import * as express from 'express';
+
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import config from './config';
+import { mountAngular, mountAngularSSR } from './misc/angular-mounter';
 
 async function bootstrap() {
   // Create the app and allow cors
@@ -19,6 +22,13 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // If we are running on production, mount angular
+  if (config.ENVIRONMENT === 'production') {
+    const expressApp = app.getHttpServer() as express.Application;
+    if (config.USE_SSR) mountAngular(expressApp);
+    else mountAngularSSR(expressApp);
+  }
 
   // Start listening
   await app.listen(process.env.PORT || 3000);

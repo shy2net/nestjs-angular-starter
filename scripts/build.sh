@@ -31,7 +31,7 @@ echo "Compiling typescript..."
 check_errcode "Failed to compile typescript! aborting script!"
 
 echo "Copying essential files..."
-bash ./copy-essentials.sh
+bash ./scripts/copy-essentials.sh
 
 check_errcode "Failed to copy essential files! aborting script!"
 

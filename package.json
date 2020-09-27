@@ -9,6 +9,7 @@
     "install:all": "bash ./scripts/install_all.sh",
     "build": "bash ./scripts/build.sh",
     "build:nest": "rm -rf dist && tsc -p .",
+    "build:angular": "cd angular-src && ng build --aot --prod",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "angular": "cd angular-src && npm start",
     "start": "node dist/src/main.js",
