@@ -5,7 +5,10 @@ import { AppModule } from './app.module';
 import config from './config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // Create the app and allow cors
+  const app = await NestFactory.create(AppModule, {
+    cors: config.CORS_OPTIONS,
+  });
 
   // Use '/api' for general prefix
   app.setGlobalPrefix('api');
@@ -16,9 +19,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  // Enable CORS to allow web access
-  app.enableCors();
 
   // Start listening
   await app.listen(process.env.PORT || 3000);
