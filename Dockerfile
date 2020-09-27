@@ -35,7 +35,7 @@ RUN chmod +x ./scripts/* && npm run install:all
 COPY . .
 
 # Build web and create a distribution
-RUN chmod +x ./build.sh && npm run build \
+RUN npm run build \
     # Copy the files required to run to the workdir
     && mkdir ${workdir} && cp -Rf ./dist ${workdir} \
     # Before we copy node modules, remove all dev modules

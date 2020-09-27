@@ -1,6 +1,5 @@
 import { DynamicModule, Module } from '@nestjs/common';
 
-import { DatabaseTestService } from '../testing/services/database.test.service';
 import { DatabaseService } from './database.service';
 
 export interface DatabaseModuleConfig {
@@ -13,7 +12,9 @@ export interface DatabaseModuleConfig {
   exports: [DatabaseService],
 })
 export class DatabaseModule {
-  static withConfig(config: DatabaseModuleConfig): DynamicModule {
+  static async withConfig(
+    config: DatabaseModuleConfig,
+  ): Promise<DynamicModule> {
     // If we are running on test, return the test module
     if (process.env.NODE_ENV === 'test') return DatabaseModule.forTest();
 
@@ -26,10 +27,21 @@ export class DatabaseModule {
   /**
    * Uses the database module for test environment, which uses in-memory mongo database.
    */
-  static forTest(): DynamicModule {
+  static async forTest(): Promise<DynamicModule> {
+    /* We are using lazy import, because if running on production and will be imported normally,
+    it will fail because of missing dev dependencies import */
+    const dbTestImport = await import(
+      '../testing/services/database.test.service'
+    );
+
     return {
       module: DatabaseModule,
-      providers: [{ provide: DatabaseService, useClass: DatabaseTestService }],
+      providers: [
+        {
+          provide: DatabaseService,
+          useClass: dbTestImport.DatabaseTestService,
+        },
+      ],
     };
   }
 }
