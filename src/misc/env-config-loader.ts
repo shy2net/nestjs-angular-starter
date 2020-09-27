@@ -5,7 +5,11 @@ import { AppConfig } from '../models';
  */
 export function getEnvConfig(): unknown {
   // Allows initializing configurations from environment, we initialize non-primitive types
-  const webEnvConfigs = {} as AppConfig;
+  const webEnvConfigs = {
+    SSL_CERTIFICATE: {},
+    JWT: {},
+    ANGULAR: {},
+  } as AppConfig;
 
   for (const envName in process.env) {
     const envValue = process.env[envName];

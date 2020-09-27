@@ -1,12 +1,12 @@
 import * as express from 'express';
-import path from 'path';
+import * as path from 'path';
 
 /**
  * Mounts angular using Server-Side-Rendering (Recommended for SEO)
  */
 export function mountAngularSSR(expressApp: express.Application): void {
   // The dist folder of compiled angular
-  const DIST_FOLDER = path.join(__dirname, 'dist');
+  const DIST_FOLDER = path.join(process.cwd(), 'dist/angular');
 
   // The compiled server file (angular-src/server.ts) path
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -20,11 +20,12 @@ export function mountAngularSSR(expressApp: express.Application): void {
  * Mounts angular as is with no SSR.
  */
 export function mountAngular(expressApp: express.Application): void {
+  const DIST_FOLDER = path.join(process.cwd(), 'dist/angular/browser');
   // Point static path to Angular 2 distribution
-  expressApp.use(express.static(path.join(__dirname, 'dist/browser')));
+  expressApp.use(express.static(DIST_FOLDER));
 
-  // Deliever the Angular 2 distribution
+  // Deliver the Angular 2 distribution
   expressApp.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'dist/browser/index.html'));
+    res.sendFile(path.join(DIST_FOLDER, 'index.html'));
   });
 }

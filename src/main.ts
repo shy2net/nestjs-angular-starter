@@ -24,10 +24,13 @@ async function bootstrap() {
   );
 
   // If we are running on production, mount angular
-  if (config.ENVIRONMENT === 'production') {
-    const expressApp = app.getHttpServer() as express.Application;
-    if (config.USE_SSR) mountAngular(expressApp);
-    else mountAngularSSR(expressApp);
+  if (config.ANGULAR.MOUNT) {
+    const expressApp = app
+      .getHttpAdapter()
+      .getInstance() as express.Application;
+
+    if (config.ANGULAR.USE_SSR) mountAngularSSR(expressApp);
+    else mountAngular(expressApp);
   }
 
   // Start listening

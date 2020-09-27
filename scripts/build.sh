@@ -52,8 +52,8 @@ else
 fi
 
 echo "Copying angular dist into dist directory..."
-mkdir ../dist/src/dist
-cp -Rf dist ../dist/src
+mkdir ../dist/angular
+cp -Rf dist/* ../dist/angular
 check_errcode "Failed to copy anuglar dist files! aborting script!"
 
 echo "Removing angular-src dist directory..."

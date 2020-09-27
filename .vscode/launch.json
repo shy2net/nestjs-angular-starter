@@ -35,6 +35,20 @@
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "port": 9229
-        }
+        },
+        {
+            "name": "Debug Production",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "start:debug"],
+            "env": {
+                "NODE_ENV": "production"
+            },
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+        },
     ]
 }

@@ -13,6 +13,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "angular": "cd angular-src && npm start",
     "start": "node dist/src/main.js",
+    "start:debug": "node --inspect-brk dist/src/main.js",
     "start:dev": "npm run copy:essentials && nest start --watch",
     "copy:essentials": "bash ./scripts/copy-essentials.sh",
     "ng:test": "cd ./angular-src && ./node_modules/.bin/ng test",
