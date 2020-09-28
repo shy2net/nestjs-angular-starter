@@ -219,7 +219,11 @@ api.controller.ts:
   }
 ```
 
-When navigating to route: `http://localhost:3000/api/test`, it will return a simple JSON return "status: ok".
+When navigating to route: `http://localhost:3000/api/test`, it will return a simple JSON which returns:
+
+```json
+{ "status": "ok" }
+```
 
 You can test this api easily by running the express server:
 > npm run start:dev
