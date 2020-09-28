@@ -516,24 +516,23 @@ For example, when registering a user validations takes place in this way:
 
 
 - NodeJS - on the server side validations are taken place in this way:
-  `/src/controllers/api.controller.ts`:
+  `/src/auth/auth.controller.ts`:
 
   ```typescript
   @Post('/register')
-  register(@BodyParams() userProfile: UserProfile): Promise<UserProfile> {
+  register(@Body() registerForm: RegisterForm): Promise<UserProfile> {
+    // Hash the user password and create it afterwards
     return registerForm.getHashedPassword().then(hashedPassword => {
       return UserProfileDbModel.create({
         ...registerForm,
-        password: hashedPassword
+        password: hashedPassword,
       });
     });
   }
   ```
 
   The validation of class-validator will take place automatically using the class-validator, you can read about it here:
-  [https://tsed.io/docs/validation.html#custom-validation](https://tsed.io/docs/validation.html#custom-validation).
-
-  The pipes required for class-validator to take place, are already implemented at `/src/pipes`;
+  [https://docs.nestjs.com/techniques/validation#validation](https://docs.nestjs.com/techniques/validation#validation).
 
 # Running on production
 
