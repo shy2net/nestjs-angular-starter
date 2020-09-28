@@ -148,39 +148,41 @@ This template comes with multiple services and proviers which can be used accros
 By default this template comes ready with Angular Universal which allows search engines to crawl your website better.
 It does this on the NodeJS side after running the `npm run build` command which bundles the angular code and create an angular universal express ready file called `out/src/dist/server.js` which our NodeJS simply imports and initializes in the `src/app.ts` file.
 
-in the `src/app.ts` you have these two methods:
+in the `src/misc/angular-mounter.ts` you have these two methods:
 
 ```typescript
-  /**
-   * Mounts angular using Server-Side-Rendering (Recommended for SEO)
-   */
-  private mountAngularSSR(): void {
-    // The dist folder of compiled angular
-    const DIST_FOLDER = path.join(__dirname, 'dist');
+/**
+ * Mounts angular using Server-Side-Rendering (Recommended for SEO)
+ */
+export function mountAngularSSR(expressApp: express.Application): void {
+  // The dist folder of compiled angular
+  const DIST_FOLDER = path.join(process.cwd(), 'dist/angular');
 
-    // The compiled server file (angular-src/server.ts) path
-    const ngApp = require(path.join(DIST_FOLDER, 'server/main'));
+  // The compiled server file (angular-src/server.ts) path
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const ngApp = require(path.join(DIST_FOLDER, 'server/main'));
 
-    // Init the ng-app using SSR
-    ngApp.init(this.expressApp, path.join(DIST_FOLDER, '/browser'));
-  }
+  // Init the ng-app using SSR
+  ngApp.init(expressApp, path.join(DIST_FOLDER, '/browser'));
+}
 
-  /**
-   * Mounts angular as is with no SSR.
-   */
-  private mountAngular(): void {
-    // Point static path to Angular 2 distribution
-    this.express.use(express.static(path.join(__dirname, 'dist/browser')));
+/**
+ * Mounts angular as is with no SSR.
+ */
+export function mountAngular(expressApp: express.Application): void {
+  const DIST_FOLDER = path.join(process.cwd(), 'dist/angular/browser');
+  // Point static path to Angular 2 distribution
+  expressApp.use(express.static(DIST_FOLDER));
 
-    // Deliever the Angular 2 distribution
-    this.express.get('*', function(req, res) {
-      res.sendFile(path.join(__dirname, 'dist/browser/index.html'));
-    });
-  }
+  // Deliver the Angular 2 distribution
+  expressApp.get('*', function(req, res) {
+    res.sendFile(path.join(DIST_FOLDER, 'index.html'));
+  });
+}
 ```
 
-By default the mountAngular is called in the init method of `src/app.ts`, simply change it into `mountAngularSSR` in order to enable
-SSR, but be careful as SSR requires special treatments in your code on certain situations.
+By default the mountAngular or mountAngularSSR is called in the init method of `src/main.ts`, in order
+to disable or enable SSR, change the related config called `ANGULAR > USE_SSR` into true to enable SSR.
 
 ## NodeJS
 
