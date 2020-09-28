@@ -263,7 +263,7 @@ And you will get this output:
 ### Database
 
 This template uses mongoose as the backend server to store users. It has only one model called UserProfileModel which you can find in the `src/models` directory.
-You can view the database code at the `src/db.ts` file, which basically is responsible with the communication to the database.
+You can view the database code at the `src/auth` directory, which basically is responsible with the communication to the database. It creates and exposes a NestJS `DatabaseModule`, which is responsible of handling the connection and database models.
 
 In order to configure the database connection string, please review the `Environment configurations` part of this readme.
 
@@ -418,31 +418,13 @@ This basically allows all of the tests to run in parallel without opening a real
 
 ##### Running the tests
 
-In order to run the tests, enter the following commands:
+In order to run the backend tests, simply enter the following command:
 
 ```bash
-# Start the test database before running the tests
-docker-compose up -d test-db
-
-### ---> Wait for the database to run (at least 30 seconds for the first time)
-
-# Wait for the database to run, and then run the tests
 npm test
 ```
 
-All configurations will be taken from the `/src/config/test.json` file, which is configured by default
-to connect a different port and a different user\password (test\test) in order to run the tests.
-
-If you would like to run this in your own CI\CD tool, make sure write the following in the test run pipeline:
-
-```bash
-# Automatically sets up the database using docker-compose
-export SETUP_DB=true
-# Start the unit tests
-npm test
-```
-
-This will automatically setup the test database and close it when the tests were finished.
+All configurations will be taken from the `/src/config/test.json` file.
 
 ## Sharing code (models, interfaces, etc)
 
