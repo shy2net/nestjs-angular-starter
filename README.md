@@ -12,9 +12,8 @@
   - [NodeJS](#nodejs)
     - [How the API works](#how-the-api-works)
       - [Working with API params](#working-with-api-params)
-      - [API middlewares](#api-middlewares)
     - [Database](#database)
-    - [Logging using Ts.LogDebug](#logging-using-tslogdebug)
+    - [Logging](#logging)
     - [SSL (https support)](#ssl-https-support)
     - [Authentication and roles](#authentication-and-roles)
       - [Social Authentication](#social-authentication)
@@ -189,11 +188,11 @@ Comes with built in typescript support and compilation.
 
 It comes with the following features:
 
-- [Nest](https://nestjs.com/) - Easier express with typescript using decorators
+- [NestJS](https://nestjs.com/) - Easier express with typescript using decorators
 - Authentication (including middlewares and token generation)
 - Angular routes support (redirect to index.html of compiled Angular code), this means you can run you Angular app and API on the same container!
 - Configuration according to environment (using [config npm package](https://www.npmjs.com/package/config)).
-- Logging (using built-in logger).
+- Logging (using built-in NestJS logger).
 - Social Authentication, which basically gets an access token from the client that logged into a service and then creates a user associated with it.
 - Unit testing using Jest.
 
@@ -202,8 +201,11 @@ Output directory of the compiled typescript will be available in the `dist` dire
 
 ### How the API works
 
-I would first recommend you to read the [introduction of NestJS](https://docs.nestjs.com/). As it will explain really good how
-the decorators help make your express app easier to write, maintain and faster for development.
+I would first recommend you to read the [introduction of NestJS](https://docs.nestjs.com/). As it will explain really the architecture and will help you make your express app easier to write, maintain and faster for development.
+
+We will use the terms 'Module', 'Service' and other NestJS related stuff, so please make sure to
+read about them before diving into this README. To sum it up, if you have experience with Angular,
+NestJS is basically the same (just for server side).
 
 Within this template, NodeJS comes with three working examples of a working api called `test`, `errorTest` and `saySomething`,
 which can be viewed under `src/controllers/api.controller`.
@@ -256,21 +258,14 @@ And you will get this output:
 }
 ```
 
-#### API middlewares
-
-The api comes with some prepacked middlewares which can be found in the `src/middlewares` directory:
-
-- `auth.middelware` - Authenticates the user against the stored credentials on the database (currently based on Mongoose).
-- `cors.middleware`- Allows passing CORS using the config.CORS_OPTIONS.
-
 ### Database
 
 This template uses mongoose as the backend server to store users. It has only one model called UserProfileModel which you can find in the `src/models` directory.
-You can view the database code at the `src/db.ts` file, which basically is responible with the communication to the database.
+You can view the database code at the `src/db.ts` file, which basically is responsible with the communication to the database.
 
 In order to configure the database connection string, please review the `Environment configurations` part of this readme.
 
-### Logging using Ts.LogDebug
+### Logging
 
 This template comes ready with [NestJS Logger](https://docs.nestjs.com/techniques/logger). It is recommended to read on how to use the logger on the NestJS website.
 
@@ -332,36 +327,37 @@ in the `src/auth.ts` file you will be able to see how the authentication is impl
 
 Basically, when a login occurs, the user is being authenticated against a hased password using bcrypt, if the passwords match, a token is being generated containing the user data within.
 
-When accessing guarded routes (using the authenticationMiddleware in the `auth.ts` file), the token will be decrypted and checked to see if it's valid. If so, the request will pass and a `req.user` property will be filled with currently logged on user.
+When accessing guarded routes (using the UserAuthGuard in the `src/auth/user-auth-guard.ts` file), the token will be decrypted and checked to see if it's valid. If so, the request will pass and a `req.user` property will be filled with currently logged on user.
 
 For example, let's take a look at a guarded route, such as the `/api/profile`.
 
 > TODO: Add correct information
-In the `api.controller.ts` you can see the following code:
+In the `auth.controller.ts` you can see the following code:
 
 ```typescript
+  @UseGuards(UserAuthGuard)
   @Get('/profile')
-  @UseBefore(AuthMiddleware)
   getProfile(@RequestUser() user: UserProfile): UserProfile {
     return user;
   }
 ```
 
-The `UseBefore` decorator will call the `AuthMiddleware` to check if the user is authorized to login.
+The `UseGuards(UserAuthGuard)` decorator will check if the user is authorized to login.
 
 Simple isn't it? The token is being delivered in the Authorization header in the format of `Authorization: Bearer ${Token}`.
 
-What about user roles? Each user profile has an array of `roles` which holds strings which contains the roles relevant for the user. For example, if you add the role `admin` to your user you should be able to access the `/api/admin_test` endpoint as it is guarded using the `AuthMiddleware`.
+What about user roles? Each user profile has an array of `roles` which holds strings that contains the roles relevant for the user. For example, if you add the role `admin` to your user you should be able to access the `/api/admin` endpoint as it is guarded using the `UserAuthGuard`.
 
 Let's see how it is implemented.
 
 `api.controller.ts`:
 
 ```typescript
+  @UseGuards(UserAuthGuard)
+  @Roles('admin')
   @Get('/admin')
-  @UseBefore(AuthMiddleware, { role: 'admin' })
-  adminTest() {
-    return this.test();
+  admin(): string {
+    return `You are an admin!`;
   }
 ```
 
@@ -394,12 +390,12 @@ port and different credentials.
 
 ### Testing (Unit Tests\API Tests)
 
-This template comes with Mocha and Chai integrated.
+This template comes with Jest integrated.
 
 There are tests for all of the following:
 
 - API tests
-- Tests for middlewares and services
+- Tests for services and guards
 - General tests
 
 Each file that has a test has a corresponding `.spec` file with the same name.
@@ -413,11 +409,10 @@ For example, for the api tests:
 When the unit tests are running, they relay on a database connection, especially
 the API tests, as these tests write mock data to the database before running the tests.
 
-Before running the tests, you must setup the tests database.
-You can do this easily using the following docker command:
-> docker-compose up -d test-db
+In order to solve this, the `DatabaseTestService` was created which uses the `mongodb-memory-server`
+to create the connection for each test suite.
 
-This will start a clean test database on a different port then the normal database.
+This basically allows all of the tests to run in parallel.
 
 ##### Running the tests
 

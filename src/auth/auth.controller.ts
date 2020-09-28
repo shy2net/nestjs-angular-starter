@@ -7,7 +7,6 @@ import { UserProfileDbModel } from '../database/models/user-profile.db.model';
 import { RegisterForm } from '../forms/register.form';
 import { AuthService } from './auth.service';
 import { RequestUser } from './request-user.decorator';
-import { Roles } from './roles.decorators';
 import { UserAuthGuard } from './user-auth-guard';
 
 @Controller()
@@ -51,12 +50,5 @@ export class AuthController {
   @Get('/logout')
   logout(): void {
     // TODO: Perform your own logout logic (blacklisting token, etc)
-  }
-
-  @UseGuards(UserAuthGuard)
-  @Roles('admin')
-  @Get('/admin')
-  admin(): string {
-    return `You are an admin!`;
   }
 }
