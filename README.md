@@ -10,6 +10,7 @@
     - [Angular components](#angular-components)
     - [Angular Universal (Server-Side-Rendering)](#angular-universal-server-side-rendering)
   - [NodeJS](#nodejs)
+    - [Server entry-point (main.ts)](#server-entry-point-maints)
     - [How the API works](#how-the-api-works)
       - [Working with API params](#working-with-api-params)
     - [Database](#database)
@@ -201,6 +202,18 @@ It comes with the following features:
 The code of NodeJS is stored under the `src` directory.
 Output directory of the compiled typescript will be available in the `dist` directory.
 
+### Server entry-point (main.ts)
+
+By default, NestJS creates a file called `main.ts`, this file is responsible of initializing the NestJS app.
+If you open up the `main.ts` file you will be able to see it does 4 things:
+
+- Create the Nest app itself
+- Set the global prefix to `/api` to allow all requests to be transferred thorugh there
+- Mount validation pipe, to force forms to be validated, [read about it here](https://docs.nestjs.com/techniques/validation#validation).
+- Mount Angular (if required) to deliever the web interface, we will read about it later
+
+After all of this is setup and ready, we can start listening to requests.
+
 ### How the API works
 
 I would first recommend you to read the [introduction of NestJS](https://docs.nestjs.com/). As it will explain really the architecture and will help you make your express app easier to write, maintain and faster for development.
@@ -209,7 +222,7 @@ We will use the terms 'Module', 'Service' and other NestJS related stuff, so ple
 read about them before diving into this README. To sum it up, if you have experience with Angular,
 NestJS is basically the same (just for server side).
 
-Within this template, NodeJS comes with three working examples of a working api called `test`, `errorTest` and `saySomething`,
+Within this template, NodeJS comes with 2 working examples of a working api called `test` and `saySomething`,
 which can be viewed under `src/controllers/api.controller`.
 
 The way this template is built makes the whole code a-lot more readable, and easier for testing.
@@ -226,7 +239,9 @@ api.controller.ts:
 When navigating to route: `http://localhost:3000/api/test`, it will return a simple JSON which returns:
 
 ```json
-{ "status": "ok" }
+{
+  "status": "ok"
+}
 ```
 
 You can test this api easily by running the express server:
@@ -262,10 +277,15 @@ And you will get this output:
 
 ### Database
 
-This template uses mongoose as the backend server to store users. It has only one model called UserProfileModel which you can find in the `src/models` directory.
-You can view the database code at the `src/auth` directory, which basically is responsible with the communication to the database. It creates and exposes a NestJS `DatabaseModule`, which is responsible of handling the connection and database models.
+This template uses mongoose as the backend server to store users. It has only one model called UserProfileModel which you can find in the `src/database/models` directory.
+You can view the database code at the `src/database` directory, which basically is responsible with the communication to the database. It creates and exposes a NestJS `DatabaseModule`, which is responsible of handling the connection and database models.
 
 In order to configure the database connection string, please review the `Environment configurations` part of this readme.
+
+Remarks: NestJS has it's own mongoose database module, which in my opinion is a lot more "complicated" as you should inject the schemas everytime with a service. I prefer using mongoose the old fashioned way, which led me to design my own database module, this allows using the normal schemas, and makes the usage of the models straight-forward as it should be.
+
+If you still prefer the original mongoose database, you can simply remove this module and use theirs [https://docs.nestjs.com/techniques/mongodb](https://docs.nestjs.com/techniques/mongodb)
+
 
 ### Logging
 
