@@ -45,7 +45,7 @@ Technologies used in this template:
 - NodeJS express typescript (with SSL support) based on [NestJS](https://nestjs.com/) - for easier express setup using decorators
 - Jest for backend testing + API tests
 - Mongoose (with basic user model)
-- Logging (using [Ts.LogDebug](https://typedproject.github.io/ts-log-debug/#/))
+- Logging (using [NestJS Logger](https://docs.nestjs.com/techniques/logger)
 - Bootstrap v4 and SCSS by default
 - [JWT](https://jwt.io/) and token authentication built-in (including user roles)
 - Social Authentication (Google and Facebook)
