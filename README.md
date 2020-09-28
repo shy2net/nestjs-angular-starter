@@ -412,7 +412,7 @@ the API tests, as these tests write mock data to the database before running the
 In order to solve this, the `DatabaseTestService` was created which uses the `mongodb-memory-server`
 to create the connection for each test suite.
 
-This basically allows all of the tests to run in parallel.
+This basically allows all of the tests to run in parallel without opening a real database.
 
 ##### Running the tests
 
