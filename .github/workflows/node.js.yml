@@ -32,8 +32,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - env:
-          IS_CI: "true"
       - run: npm run install:all
         # Forces mongo-memory-server to be installed
       - run: npm install mongodb-memory-server

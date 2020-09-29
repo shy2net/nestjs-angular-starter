@@ -6,7 +6,7 @@ function install_deps() {
     npm install --only=dev --ignore-scripts
 
     # If we are running on CI, don't run postinstall
-    if [ $IS_CI ]; then
+    if [ $CI ]; then
         echo "Running CI, skipping postinstall scripts..."
         # Install prod dependencies and run postinstall script if exists
         npm install --only=prod --ignore-scripts
