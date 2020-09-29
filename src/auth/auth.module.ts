@@ -6,7 +6,6 @@ import config from '../config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { UserAuthGuard } from './user-auth-guard';
 
 /**
  * Responsible of authenticating the user requests using JWT authentication
@@ -22,7 +21,7 @@ import { UserAuthGuard } from './user-auth-guard';
     }),
   ],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService, UserAuthGuard],
+  exports: [AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

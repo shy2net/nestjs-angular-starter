@@ -5,12 +5,15 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import config from './config';
+import { getHttpsOptionsFromConfig } from './misc';
 import { mountAngular, mountAngularSSR } from './misc/angular-mounter';
 
 async function bootstrap() {
-  // Create the app and allow cors
+  // Create the app and allow cors and HTTPS support (if configured)
   const app = await NestFactory.create(AppModule, {
     cors: config.CORS_OPTIONS,
+    // Will work only if SSH is configured on the related environment config, if not, normal HTTP will be used
+    httpsOptions: getHttpsOptionsFromConfig(),
   });
 
   // Use '/api' for general prefix

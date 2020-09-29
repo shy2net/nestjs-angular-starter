@@ -211,9 +211,11 @@ First, lets take a look at the file:
 
 ```typescript
 async function bootstrap() {
-  // Create the app and allow cors
+  // Create the app and allow cors and HTTPS support (if configured)
   const app = await NestFactory.create(AppModule, {
     cors: config.CORS_OPTIONS,
+    // Will work only if SSH is configured on the related environment config, if not, normal HTTP will be used
+    httpsOptions: getHttpsOptionsFromConfig(),
   });
 
   // Use '/api' for general prefix
@@ -245,7 +247,7 @@ bootstrap();
 
 The following code, does these 4 things:
 
-- Create the Nest app itself
+- Create the Nest app itself, with CORS support and HTTPS support, HTTPS will only work if environment configured 'SSL_CERTIFICATE' config correctly. CORS will use the configurations specified in the environment config called 'CORS_OPTIONS'.
 - Set the global prefix to `/api` to allow all requests to be transferred thorough there
 - Mount validation pipe, to force forms to be validated using the `class-validator` package, [read about it here](https://docs.nestjs.com/techniques/validation#validation).
 - Mount Angular (if required) to deliver the web interface, we will read about it later
@@ -430,25 +432,29 @@ Let's say we want to configure the production to enable HTTPS, simply open up th
 }
 ```
 
-Now when your server loads up, it will call this method in the `server.ts` file:
+Now when your server loads up, it will call this method in the `src/misc/utils.ts` file:
+
 ```typescript
-  /**
-   * Returns the SSL (https) if any configured for this environment.
-   */
-  getSSLConfigurations() {
-    const sslConfig = config.SSL_CERTIFICATE;
+/**
+ * Returns the HTTPS options, if supported by the environment.
+ */
+export function getHttpsOptionsFromConfig(): HttpsOptions {
+  const readFileIfExists = (filePath: string): Buffer => {
+    if (filePath) return fs.readFileSync(filePath);
+  };
 
-    if (!sslConfig) return {};
+  const sslConfig = config.SSL_CERTIFICATE;
 
-    return {
-      httpsPort: 443,
-      httpsOptions: {
-        key: sslConfig.KEY,
-        cert: sslConfig.CERT,
-        ca: sslConfig.CA
-      }
-    };
-  }
+  return (
+    // If there are any SSL configurations
+    sslConfig &&
+    Object.keys(sslConfig).length > 0 && {
+      key: readFileIfExists(config.SSL_CERTIFICATE.KEY),
+      cert: readFileIfExists(config.SSL_CERTIFICATE.CERT),
+      ca: readFileIfExists(config.SSL_CERTIFICATE.CA),
+    }
+  );
+}
 ```
 
 ### Authentication and roles

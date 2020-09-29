@@ -12,7 +12,7 @@ import { AppRequest, AppResponse } from '../models';
 export class SocialAuthController {
   constructor(private authService: AuthService) {}
 
-  @Get('/:provider')
+  @Get(':provider')
   async socialLogin(
     @Param('provider') provider: string,
     @Body() user: UserProfile,
