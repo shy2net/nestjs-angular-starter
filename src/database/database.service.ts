@@ -11,6 +11,10 @@ export interface IDatabaseService {
   close(): Promise<void>;
 }
 
+/**
+ * Responsible of connecting and closing the mongo database connection, it will reconnect a few times
+ * if connection cannot be established on the first time.
+ */
 @Injectable()
 export class DatabaseService
   implements IDatabaseService, OnModuleInit, OnModuleDestroy {
@@ -23,6 +27,9 @@ export class DatabaseService
     private readonly config: DatabaseModuleConfig,
   ) {}
 
+  /**
+   * This forces the database to connect when the database module is imported.
+   */
   async onModuleInit(): Promise<void> {
     await this.connectWithRetry(this.config.retryCount || 8);
   }
@@ -50,6 +57,9 @@ export class DatabaseService
     if (db) await db.close();
   }
 
+  /**
+   * Closes the database when the app is being closed.
+   */
   async onModuleDestroy(): Promise<void> {
     await this.close();
   }

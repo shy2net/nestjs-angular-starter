@@ -6,7 +6,13 @@ import config from '../config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { UserAuthGuard } from './user-auth-guard';
 
+/**
+ * Responsible of authenticating the user requests using JWT authentication
+ * and Passport. It exposes the AuthService which allows managing user authentication,
+ * and the UserAuthGuard which allows authenticating each user request.
+ */
 @Module({
   imports: [
     PassportModule,
@@ -16,7 +22,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
   ],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
+  exports: [AuthService, UserAuthGuard],
   controllers: [AuthController],
 })
 export class AuthModule {}

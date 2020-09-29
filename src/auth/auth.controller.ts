@@ -13,6 +13,12 @@ import { UserAuthGuard } from './user-auth-guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  /**
+   * Performs the login process of a user, if the username and password are correct,
+   * returns the token and related user profile data.
+   * @param username
+   * @param password
+   */
   @Post('/login')
   @HttpCode(200)
   login(
@@ -29,6 +35,10 @@ export class AuthController {
     });
   }
 
+  /**
+   * Registers a new local user.
+   * @param registerForm
+   */
   @Post('/register')
   register(@Body() registerForm: RegisterForm): Promise<UserProfile> {
     // Hash the user password and create it afterwards

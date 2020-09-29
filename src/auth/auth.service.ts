@@ -7,6 +7,9 @@ import { JwtService } from '@nestjs/jwt';
 
 import { IUserProfileDbModel, UserProfileDbModel } from '../database/models/user-profile.db.model';
 
+/**
+ * Responsible of authenticating users, it uses JWT for the authentication process.
+ */
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService) {}

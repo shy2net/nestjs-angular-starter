@@ -7,11 +7,24 @@ export interface DatabaseModuleConfig {
   retryCount?: number;
 }
 
+/**
+ * Responsible of connecting mongo based database, exposes the DatabaseService which handles
+ * the first connection. You can create new models at the `models` directory and access the schemas
+ * as you would with mongoose.
+ *
+ * The database will be automatically connected when this module is imported.
+ */
 @Module({
   providers: [DatabaseService],
   exports: [DatabaseService],
 })
 export class DatabaseModule {
+  /**
+   * Loads the database connection with the provided configurations.a1
+   * If env is set to 'test', will automatically return the in-memory mongo database
+   * and ignore all configurations.
+   * @param config
+   */
   static async withConfig(
     config: DatabaseModuleConfig,
   ): Promise<DynamicModule> {

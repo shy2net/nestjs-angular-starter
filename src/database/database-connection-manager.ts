@@ -28,7 +28,7 @@ export class DatabaseConnectionManager {
   }
 
   /**
-   * Returns the open connection (if exists).
+   * Returns the 1st open connection (if exists).
    *
    * @readonly
    * @type {mongoose.Connection}

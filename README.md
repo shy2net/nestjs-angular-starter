@@ -11,6 +11,7 @@
     - [Angular Universal (Server-Side-Rendering)](#angular-universal-server-side-rendering)
   - [NodeJS](#nodejs)
     - [Server entry-point (main.ts)](#server-entry-point-maints)
+    - [NestJS App Module](#nestjs-app-module)
     - [How the API works](#how-the-api-works)
       - [Working with API params](#working-with-api-params)
     - [Database](#database)
@@ -192,7 +193,7 @@ Comes with built in typescript support and compilation.
 It comes with the following features:
 
 - [NestJS](https://nestjs.com/) - Easier express with typescript using decorators
-- Authentication (including middlewares and token generation)
+- Authentication (including route-guards and token generation)
 - Angular routes support (redirect to index.html of compiled Angular code), this means you can run you Angular app and API on the same container!
 - Configuration according to environment (using [config npm package](https://www.npmjs.com/package/config)).
 - Logging (using built-in NestJS logger).
@@ -205,14 +206,28 @@ Output directory of the compiled typescript will be available in the `dist` dire
 ### Server entry-point (main.ts)
 
 By default, NestJS creates a file called `main.ts`, this file is responsible of initializing the NestJS app.
-If you open up the `main.ts` file you will be able to see it does 4 things:
+If you open up the `src/main.ts` file you will be able to see it does 4 things:
 
 - Create the Nest app itself
-- Set the global prefix to `/api` to allow all requests to be transferred thorugh there
-- Mount validation pipe, to force forms to be validated, [read about it here](https://docs.nestjs.com/techniques/validation#validation).
-- Mount Angular (if required) to deliever the web interface, we will read about it later
+- Set the global prefix to `/api` to allow all requests to be transferred thorough there
+- Mount validation pipe, to force forms to be validated using the `class-validator` package, [read about it here](https://docs.nestjs.com/techniques/validation#validation).
+- Mount Angular (if required) to deliver the web interface, we will read about it later
 
 After all of this is setup and ready, we can start listening to requests.
+
+### NestJS App Module
+
+The `src/app.module.ts` is the root level module which NestJS uses.
+
+This module imports the following modules:
+
+- `DatabaseModule` - Responsible of connecting to our mongo based database. It handles the connection on load, and relies on mongoose. This means you can use your mongoose schemas as usual.
+
+- `AuthModule` - Responsible of authenticating requests to endpoints, it is based on `passport-local` and uses `JWT` strategy with the `Bearer` authentication header in order
+to authenticate each user.
+
+- `SocialAuthModule` - Reponsible of communicating 3rd party oauth-2 providers using passport, for example: `passport-google-token` and `passport-facebook-token`
+
 
 ### How the API works
 

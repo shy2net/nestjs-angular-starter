@@ -5,6 +5,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { AppRequest } from '../models';
 import { AuthService } from './auth.service';
 
+/**
+ * Responsible of guarding endpoints by authenticating them, including their roles using JWT.
+ */
 @Injectable()
 export class UserAuthGuard extends AuthGuard('jwt') {
   constructor(private authService: AuthService, private reflector: Reflector) {
@@ -37,7 +40,7 @@ export class UserAuthGuard extends AuthGuard('jwt') {
   async validateAndAppendUserToRequest(
     context: ExecutionContext,
   ): Promise<boolean> {
-    // If we are on test environment, use different authentication
+    // If we are on test environment, use 'simplified' authentication
     if (process.env.NODE_ENV === 'test') {
       const testUserValidated = await this.validateAndAppendUserForTest(
         context,
@@ -61,8 +64,10 @@ export class UserAuthGuard extends AuthGuard('jwt') {
       authorizationHeader &&
       authorizationHeader.toLowerCase().startsWith('bearer')
     ) {
+      // Get the token itself (removes the 'bearer')
       const token = this.extractTokenFromBearerHeader(authorizationHeader);
 
+      // If it's the admin user token
       if (token === 'admin') {
         // This is the administrator token, use the root user
         const rootUser = await this.authService.getUserFromDB('root@mail.com');
@@ -80,7 +85,7 @@ export class UserAuthGuard extends AuthGuard('jwt') {
   }
 
   /**
-   * Validates the roles provided, if no roles were provided, automatically returns true.
+   * Validates that the user has all of the required roles, if no roles were provided, automatically returns true.
    * @param context
    */
   validateUserRoles(context: ExecutionContext): boolean {
