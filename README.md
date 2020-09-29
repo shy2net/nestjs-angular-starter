@@ -208,6 +208,40 @@ Output directory of the compiled typescript will be available in the `dist` dire
 By default, NestJS creates a file called `main.ts`, this file is responsible of initializing the NestJS app.
 If you open up the `src/main.ts` file you will be able to see it does 4 things:
 
+```typescript
+async function bootstrap() {
+  // Create the app and allow cors
+  const app = await NestFactory.create(AppModule, {
+    cors: config.CORS_OPTIONS,
+  });
+
+  // Use '/api' for general prefix
+  app.setGlobalPrefix('api');
+
+  // Allow validation and transform of params
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
+  // If we are running on production, mount angular
+  if (config.ANGULAR.MOUNT) {
+    const expressApp = app
+      .getHttpAdapter()
+      .getInstance() as express.Application;
+
+    if (config.ANGULAR.USE_SSR) mountAngularSSR(expressApp);
+    else mountAngular(expressApp);
+  }
+
+  // Start listening
+  await app.listen(process.env.PORT || 3000);
+}
+
+bootstrap();
+```
+
 - Create the Nest app itself
 - Set the global prefix to `/api` to allow all requests to be transferred thorough there
 - Mount validation pipe, to force forms to be validated using the `class-validator` package, [read about it here](https://docs.nestjs.com/techniques/validation#validation).
@@ -219,6 +253,21 @@ After all of this is setup and ready, we can start listening to requests.
 
 The `src/app.module.ts` is the root level module which NestJS uses.
 
+The file looks like this:
+
+```typescript
+@Module({
+  imports: [
+    DatabaseModule.withConfig({ uri: config.DB_URI }),
+    AuthModule,
+    SocialAuthModule,
+  ],
+  controllers: [ApiController],
+  providers: [],
+})
+export class AppModule {}
+```
+
 This module imports the following modules:
 
 - `DatabaseModule` - Responsible of connecting to our mongo based database. It handles the connection on load, and relies on mongoose. This means you can use your mongoose schemas as usual.
@@ -226,7 +275,7 @@ This module imports the following modules:
 - `AuthModule` - Responsible of authenticating requests to endpoints, it is based on `passport-local` and uses `JWT` strategy with the `Bearer` authentication header in order
 to authenticate each user.
 
-- `SocialAuthModule` - Reponsible of communicating 3rd party oauth-2 providers using passport, for example: `passport-google-token` and `passport-facebook-token`
+- `SocialAuthModule` - Reponsible of communicating 3rd party oauth-2 providers using passport, for example: `passport-google-token` and `passport-facebook-token`.
 
 
 ### How the API works
