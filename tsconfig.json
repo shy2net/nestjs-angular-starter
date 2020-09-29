@@ -21,5 +21,9 @@
     "src/tests",
     "node_modules",
     "dist"
+  ],
+  "include": [
+    "src",
+    "shared"
   ]
 }
