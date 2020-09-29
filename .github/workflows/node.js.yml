@@ -32,6 +32,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - run: export IS_CI=true
       - run: npm run install:all
       - run: npm test
       - run: npm run ng:test:ci

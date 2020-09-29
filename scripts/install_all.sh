@@ -4,8 +4,16 @@
 function install_deps() {
     # Install dev depdendencies but ignore postinstall script
     npm install --only=dev --ignore-scripts
-    # Install prod dependencies and run postinstall script if exists
-    npm install --only=prod
+
+    # If we are running on CI, don't run postinstall
+    if [ $IS_CI ]; then
+        echo "Running CI, skipping postinstall scripts..."
+        # Install prod dependencies and run postinstall script if exists
+        npm install --only=prod --ignore-scripts
+    else
+        # Install prod dependencies and run postinstall script if exists
+        npm install --only=prod
+    fi
 }
 
 echo "Installing all dependencies for NodeJS & Angular..."
