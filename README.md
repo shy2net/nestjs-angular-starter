@@ -205,9 +205,9 @@ Output directory of the compiled typescript will be available in the `dist` dire
 
 ### Server entry-point (main.ts)
 
-By default, NestJS creates a file called `main.ts`, this file is responsible of initializing the NestJS app.
+By default, NestJS creates a file called `src/main.ts`, this file is responsible of initializing the NestJS app.
 
-First, lets take a look of the file:
+First, lets take a look at the file:
 
 ```typescript
 async function bootstrap() {
@@ -348,6 +348,48 @@ This template uses mongoose as the backend server to store users. It has only on
 You can view the database code at the `src/database` directory, which basically is responsible with the communication to the database. It creates and exposes a NestJS `DatabaseModule`, which is responsible of handling the connection and database models.
 
 In order to configure the database connection string, please review the `Environment configurations` part of this readme.
+
+How do we use it? easy! lets take a look at how the `AuthService` accesses the database
+to get a user from an email:
+
+```typescript
+  getUserFromDB(
+    email: string,
+  ): DocumentQuery<IUserProfileDbModel, IUserProfileDbModel, unknown> {
+    /*
+    Here we are using the normal schemas of mongoose, no magic is happening!
+    Because we have already established the connection by importing the DatabaseModule,
+    We can simply use the `findOne` method as we are used to on mongoose.
+    */
+    return UserProfileDbModel.findOne({ email });
+  }
+```
+
+Let's take a look at the UserProfile schema (`src/database/models/user-profile.db.model.ts`):
+
+```typescript
+export const UserProfileSchema = new Schema({
+  email: {
+    unique: true,
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 4,
+  },
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6,
+  },
+  roles: [String],
+});
+```
 
 Remarks: NestJS has it's own mongoose database module, which in my opinion is a lot more "complicated" as you should inject the schemas everytime with a service. I prefer using mongoose the old fashioned way, which led me to design my own database module, this allows using the normal schemas, and makes the usage of the models straight-forward as it should be.
 
