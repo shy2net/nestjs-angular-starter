@@ -206,7 +206,8 @@ Output directory of the compiled typescript will be available in the `dist` dire
 ### Server entry-point (main.ts)
 
 By default, NestJS creates a file called `main.ts`, this file is responsible of initializing the NestJS app.
-If you open up the `src/main.ts` file you will be able to see it does 4 things:
+
+First, lets take a look of the file:
 
 ```typescript
 async function bootstrap() {
@@ -241,6 +242,8 @@ async function bootstrap() {
 
 bootstrap();
 ```
+
+The following code, does these 4 things:
 
 - Create the Nest app itself
 - Set the global prefix to `/api` to allow all requests to be transferred thorough there
