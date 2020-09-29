@@ -344,8 +344,8 @@ And you will get this output:
 
 ### Database
 
-This template uses mongoose as the backend server to store users. It has only one model called UserProfileModel which you can find in the `src/database/models` directory.
-You can view the database code at the `src/database` directory, which basically is responsible with the communication to the database. It creates and exposes a NestJS `DatabaseModule`, which is responsible of handling the connection and database models.
+This template uses mongo as the database, specifically mongoose as the api for communication with mongo. Currently, It has only one model called UserProfileModel which you can find in the `src/database/models` directory.
+You can view the database code at the `src/database` directory, which basically is responsible for the communication to the database. It creates and exposes a NestJS `DatabaseModule`, which is responsible of handling the connection and database models.
 
 In order to configure the database connection string, please review the `Environment configurations` part of this readme.
 
@@ -391,7 +391,7 @@ export const UserProfileSchema = new Schema({
 });
 ```
 
-Remarks: NestJS has it's own mongoose database module, which in my opinion is a lot more "complicated" as you should inject the schemas everytime with a service. I prefer using mongoose the old fashioned way, which led me to design my own database module, this allows using the normal schemas, and makes the usage of the models straight-forward as it should be.
+Remarks: NestJS has it's own mongoose database module, which in my opinion is a lot more "complicated" as you should inject the schemas every-time with a service. I prefer using mongoose the old fashioned way, which led me to design my own database module, this allows using the normal schemas, and makes the usage of the models straight-forward as it should be.
 
 If you still prefer the original mongoose database, you can simply remove this module and use theirs [https://docs.nestjs.com/techniques/mongodb](https://docs.nestjs.com/techniques/mongodb)
 
@@ -453,8 +453,9 @@ Now when your server loads up, it will call this method in the `server.ts` file:
 
 ### Authentication and roles
 
-This template comes prepacked with JWT authentication and associated middlewares to authenticate users.
-in the `src/auth.ts` file you will be able to see how the authentication is implemented.
+This template comes prepacked with JWT authentication and associated route-guards to authenticate users.
+in the `src/auth` directory you will be able to see how the authentication is implemented.
+It is basically based on `passport-local` with `JWT` strategy.
 
 Basically, when a login occurs, the user is being authenticated against a hased password using bcrypt, if the passwords match, a token is being generated containing the user data within.
 
