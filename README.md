@@ -92,10 +92,10 @@ Make sure to install [git bash](https://git-scm.com/downloads), this allows you 
 
 After cloning this repository, make sure to run the following command:
  ```bash
- chmod +x ./install_all.sh && chmod +x ./predebug.sh && chmod +x ./build.sh && chmod +x ./test.sh
+ chmod +x ./scripts/*
  ```
 
-This will give permission to run all included required to work with this template.
+This will give permission to run all required scripts to work with this template.
 
 # Starting with this template
 
@@ -275,7 +275,9 @@ The file looks like this:
   imports: [
     DatabaseModule.withConfig({ uri: config.DB_URI }),
     AuthModule,
-    SocialAuthModule,
+    SocialAuthModule.withConfig({
+      socialAuthServices: config.SOCIAL_CREDENTIALS as SocialAuthServices,
+    }),
   ],
   controllers: [ApiController],
   providers: [],
