@@ -39,7 +39,8 @@
 
 # Remarks
 
-> This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular.
+> This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular. This template is based on the exact same code for Angular, and most of the original template node code reused and refactored to suit NestJS approach.
+> This library still uses the same config approach and database approach as the old one. The reason for this, is that in my opinion, NestJS approach for mongo database and environment configuration makes the development more complicated then it should.
 
 # Introduction
 
