@@ -1,7 +1,7 @@
 import * as passport from 'passport';
 import { LoginResponse } from 'shared';
 
-import { Body, Controller, Get, Param, Request, Response } from '@nestjs/common';
+import { Controller, Get, Param, Request, Response } from '@nestjs/common';
 
 import { UserProfile } from '../../shared/models/user-profile';
 import { AuthService } from '../auth/auth.service';
@@ -15,10 +15,11 @@ export class SocialAuthController {
   @Get(':provider')
   async socialLogin(
     @Param('provider') provider: string,
-    @Body() user: UserProfile,
     @Request() req?: AppRequest,
     @Response() res?: AppResponse,
   ): Promise<LoginResponse> {
+    let user: UserProfile;
+
     // If this is not unit testing and we have obtained a request
     if (req) {
       // Wait for the passport middleware to run
