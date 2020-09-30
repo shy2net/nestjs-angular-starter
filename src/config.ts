@@ -37,19 +37,7 @@ const DEBUG_MODE = isDebugging;
 const CORS_OPTIONS: cors.CorsOptions = {
   origin: exportedConfig.CLIENT_URL,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  allowedHeaders: [
-    'Origin',
-    'X-Requested-With',
-    'Content-Type',
-    'Accept',
-    'Authentication',
-    'Authorization',
-    'x-auth',
-    'access_token',
-  ],
-  methods: 'GET,HEAD,POST,OPTIONS,PUT,PATCH,DELETE',
   credentials: true,
-  preflightContinue: true,
 };
 
 const ENVIRONMENT = process.env['NODE_ENV'] || 'development';

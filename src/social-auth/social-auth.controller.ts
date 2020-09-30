@@ -28,10 +28,15 @@ export class SocialAuthController {
         req,
         res,
       ); // Authenticate using the provider suitable (google-token, facebook-token)
+
+      // Now handle the user this middleware obtained
       user = req.user;
     }
 
     const token = this.authService.generateToken(user);
+    // Because we injected the request here, we must return the JSON because NestJS expects us to handle the request
+    res.json({ token, user });
+
     return {
       token,
       user,

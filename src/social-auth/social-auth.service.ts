@@ -5,22 +5,38 @@ import * as FacebookTokenStrategy from 'passport-facebook-token';
 import { Strategy as GoogleTokenStrategy } from 'passport-google-token';
 import * as randomstring from 'randomstring';
 
-import { UserProfile } from '../../shared/models';
-import config from '../config';
-import { IUserProfileDbModel, UserProfileDbModel } from '../database/models/user-profile.db.model';
+import { Inject, Injectable } from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 
-export class SocialAuthentication {
-  init(express: Application): void {
+import { UserProfile } from '../../shared/models';
+import { IUserProfileDbModel, UserProfileDbModel } from '../database/models/user-profile.db.model';
+import { SocialAuthModuleConfig } from './social-auth.models';
+
+/**
+ * Responsible of initializing social authentication with 3rd party providers
+ * (such as Google and Facebook), by initializing passport facebook and google middlewares.
+ */
+@Injectable()
+export class SocialAuthService {
+  constructor(
+    @Inject('SOCIAL_AUTH_MODULE_CONFIG') private config: SocialAuthModuleConfig,
+    adapterHost: HttpAdapterHost,
+  ) {
+    // Get the express app in order to initialize social authentication
+    const expressApp = adapterHost.httpAdapter.getInstance() as Application;
+
+    // Now initialize the social authentication
+    this.init(expressApp);
+  }
+
+  private init(express: Application): void {
     express.use(passport.initialize());
     this.initFacebook();
     this.initGoogle();
   }
 
-  initFacebook(): void {
-    const facebookCredentials = config.SOCIAL_CREDENTIALS['facebook'] as {
-      APP_ID: string;
-      APP_SECRET: string;
-    };
+  private initFacebook(): void {
+    const facebookCredentials = this.config.socialAuthServices['facebook'];
 
     passport.use(
       new FacebookTokenStrategy(
@@ -48,11 +64,8 @@ export class SocialAuthentication {
     );
   }
 
-  initGoogle(): void {
-    const googleCredentials = config.SOCIAL_CREDENTIALS['google'] as {
-      APP_ID: string;
-      APP_SECRET: string;
-    };
+  private initGoogle(): void {
+    const googleCredentials = this.config.socialAuthServices['google'];
 
     passport.use(
       new GoogleTokenStrategy(
@@ -134,5 +147,3 @@ export class SocialAuthentication {
     });
   }
 }
-
-export default new SocialAuthentication();

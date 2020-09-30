@@ -7,7 +7,6 @@ import { AppModule } from './app.module';
 import config from './config';
 import { getHttpsOptionsFromConfig } from './misc';
 import { mountAngular, mountAngularSSR } from './misc/angular-mounter';
-import socialAuth from './social-auth/social-auth';
 
 async function bootstrap() {
   // Create the app and allow cors and HTTPS support (if configured)
@@ -27,17 +26,16 @@ async function bootstrap() {
     }),
   );
 
-  // Get the express app
-  const expressApp = app.getHttpAdapter().getInstance() as express.Application;
-
   // If we are running on production, mount angular
   if (config.ANGULAR.MOUNT) {
+    // Get the express app
+    const expressApp = app
+      .getHttpAdapter()
+      .getInstance() as express.Application;
+
     if (config.ANGULAR.USE_SSR) mountAngularSSR(expressApp);
     else mountAngular(expressApp);
   }
-
-  // Mount social auth to allow it
-  socialAuth.init(expressApp);
 
   // Start listening
   await app.listen(process.env.PORT || 3000);
