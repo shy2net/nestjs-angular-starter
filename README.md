@@ -37,6 +37,8 @@
 
 # Introduction
 
+> This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is a more documented, and popular library, which has very much the same approach as Angular. The old starter template won't be updated anymore.
+
 This starter template comes with NodeJS (typescript) and Angular 10. It shares models between Angular
 and NodeJS. Both of the NodeJS and and Angular 10 can run on the same webserver as the NodeJS exposes all of the
 default routes to Angular and all of the known routes to the api.
