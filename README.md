@@ -39,7 +39,10 @@
 
 # Remarks
 
-> This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular. This template is based on the exact same code for Angular, and most of the original template node code reused and refactored to suit NestJS approach.
+> This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular.
+
+> This template is based on the exact same code for Angular, and most of the original template node code reused and refactored to suit NestJS approach.
+
 > This library still uses the same config approach and database approach as the old one. The reason for this, is that in my opinion, NestJS approach for mongo database and environment configuration makes the development more complicated then it should.
 
 # Introduction
@@ -54,7 +57,7 @@ Technologies used in this template:
 - NodeJS express typescript (with SSL support) based on [NestJS](https://nestjs.com/) - for easier express setup using decorators
 - Jest for backend testing + API tests
 - Mongoose (with basic user model)
-- Logging (using [NestJS Logger](https://docs.nestjs.com/techniques/logger)
+- Logging (using [NestJS Logger](https://docs.nestjs.com/techniques/logger))
 - Bootstrap v4 and SCSS by default
 - [JWT](https://jwt.io/) and token authentication built-in (including user roles)
 - Social Authentication (Google and Facebook)
