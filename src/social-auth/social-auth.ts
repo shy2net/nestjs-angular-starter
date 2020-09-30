@@ -17,7 +17,7 @@ export class SocialAuthentication {
   }
 
   initFacebook(): void {
-    const facebookCredentails = config.SOCIAL_CREDENTIALS['facebook'] as {
+    const facebookCredentials = config.SOCIAL_CREDENTIALS['facebook'] as {
       APP_ID: string;
       APP_SECRET: string;
     };
@@ -25,8 +25,8 @@ export class SocialAuthentication {
     passport.use(
       new FacebookTokenStrategy(
         {
-          clientID: facebookCredentails.APP_ID,
-          clientSecret: facebookCredentails.APP_SECRET,
+          clientID: facebookCredentials.APP_ID,
+          clientSecret: facebookCredentials.APP_SECRET,
         },
         (accessToken, refreshToken, profile, done) => {
           const fbProfile = profile._json;
@@ -49,7 +49,7 @@ export class SocialAuthentication {
   }
 
   initGoogle(): void {
-    const googleCredentails = config.SOCIAL_CREDENTIALS['google'] as {
+    const googleCredentials = config.SOCIAL_CREDENTIALS['google'] as {
       APP_ID: string;
       APP_SECRET: string;
     };
@@ -57,7 +57,7 @@ export class SocialAuthentication {
     passport.use(
       new GoogleTokenStrategy(
         {
-          clientID: googleCredentails.APP_ID,
+          clientID: googleCredentials.APP_ID,
         },
         (accessToken, refreshToken, profile, done) => {
           const googleProfile = profile._json;
