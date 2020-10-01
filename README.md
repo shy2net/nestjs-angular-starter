@@ -437,7 +437,7 @@ file is the SSL_CERTIFICATE:
 
 Let's say we want to configure the production to enable HTTPS, simply open up the `src/config/production.json` file and configure it as followed:
 
-```json
+```typescript
 {
   // ...Some JSON props...
   "DB_URI": "production-mongo-uri",
