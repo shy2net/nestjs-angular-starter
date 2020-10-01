@@ -22,6 +22,9 @@ export class SocialAuthService {
     @Inject('SOCIAL_AUTH_MODULE_CONFIG') private config: SocialAuthModuleConfig,
     adapterHost: HttpAdapterHost,
   ) {
+    // Don't do anything on test as there is not instance of express
+    if (process.env.NODE_ENV === 'test') return;
+
     // Get the express app in order to initialize social authentication
     const expressApp = adapterHost.httpAdapter.getInstance() as Application;
 
