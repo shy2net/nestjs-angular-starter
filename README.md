@@ -21,6 +21,7 @@
     - [Authentication and roles](#authentication-and-roles)
       - [Social Authentication](#social-authentication)
     - [Environment configurations](#environment-configurations)
+      - [Use the configurations](#use-the-configurations)
     - [Testing (Unit Tests\API Tests)](#testing-unit-testsapi-tests)
         - [Test database](#test-database)
         - [Running the tests](#running-the-tests)
@@ -41,7 +42,7 @@
 
 > This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular.
 
-> This template is based on the exact same code for Angular, and most of the original template node code reused and refactored to suit NestJS approach.
+> This template is based on the exact same code for Angular, and most of the original template node code was reused and refactored to suit NestJS approach.
 
 > This library still uses the same config approach and database approach as the old one. The reason for this, is that in my opinion, NestJS approach for mongo database and environment configuration makes the development more complicated then it should.
 
@@ -56,6 +57,7 @@ Technologies used in this template:
 - Angular 10 (with SSR) - including unit tests (based on Jasmine + Karma)
 - NodeJS express typescript (with SSL support) based on [NestJS](https://nestjs.com/) - for easier express setup using decorators
 - Jest for backend testing + API tests
+- Environment based configurations
 - Mongoose (with basic user model)
 - Logging (using [NestJS Logger](https://docs.nestjs.com/techniques/logger))
 - Bootstrap v4 and SCSS by default
@@ -84,7 +86,7 @@ Optionally, you can connect to your own mongo-db instance by configuring it (rea
 
 ### On Windows
 
-Make sure to install [git bash](https://git-scm.com/downloads), this allows you to run `bash` commands which are essential for the build process. You can use any other bash for windows, as long as it can run the scripts this template relays on (`./install_all.sh, predebug.sh, build.sh, test.sh`).
+Make sure to install [git bash](https://git-scm.com/downloads), this allows you to run `bash` commands which are essential for the build process. You can use any other bash for windows, as long as it can run the scripts this template relays on (`./install_all.sh, copy-essentials.sh, build.sh`).
 
 **Make sure to add bash to your system 'PATH'.**
 
@@ -273,11 +275,12 @@ The file looks like this:
 ```typescript
 @Module({
   imports: [
-    DatabaseModule.withConfig({ uri: config.DB_URI }),
+    DatabaseModule.register({ uri: config.DB_URI }),
     AuthModule,
-    SocialAuthModule.withConfig({
+    SocialAuthModule.register({
       socialAuthServices: config.SOCIAL_CREDENTIALS as SocialAuthServices,
     }),
+    ConfigManagerModule,
   ],
   controllers: [ApiController],
   providers: [],
@@ -292,7 +295,9 @@ This module imports the following modules:
 - `AuthModule` - Responsible of authenticating requests to endpoints, it is based on `passport-local` and uses `JWT` strategy with the `Bearer` authentication header in order
 to authenticate each user.
 
-- `SocialAuthModule` - Reponsible of communicating 3rd party oauth-2 providers using passport, for example: `passport-google-token` and `passport-facebook-token`.
+- `SocialAuthModule` - Responsible of communicating 3rd party oauth-2 providers using passport, for example: `passport-google-token` and `passport-facebook-token`.
+
+- `ConfigManagerModule` - Responsible of managing and loading environment related configurations, and helps injecting the configurations to other services.
 
 
 ### How the API works
@@ -346,7 +351,7 @@ api.controller.ts:
 
 Now simple open up your browser to the api url with a 'whatToSay' param:
 
-> http://localhost:3000/api/say-something?what=Hello
+> [http://localhost:3000/api/say-something?what=Hello](http://localhost:3000/api/say-something?what=Hello)
 
 And you will get this output:
 
@@ -421,17 +426,20 @@ This template comes with SSL support right out of the box. The only things you n
 file is the SSL_CERTIFICATE:
 
 ```typescript
+  // ...Some code...
   SSL_CERTIFICATE: {
     KEY: string;
     CERT: string;
     CA: string;
   };
+  // ...Some code...
 ```
 
 Let's say we want to configure the production to enable HTTPS, simply open up the `src/config/production.json` file and configure it as followed:
+
 ```json
 {
-  ...
+  // ...Some JSON props...
   "DB_URI": "production-mongo-uri",
   "CLIENT_URL": "http://yourwebsite.com",
   // You must create a certificate in order to enable SSL (you can use https://letsencrypt.org/ for a free certificate)
@@ -440,7 +448,7 @@ Let's say we want to configure the production to enable HTTPS, simply open up th
     "PRIVATE_KEY_PATH": "path/to/privkey.pem",
     "CERTIFICATE_PATH": "path/to/cert.pem"
   }
-  ...
+  // ...Some JSON props...
 }
 ```
 
@@ -475,13 +483,12 @@ This template comes prepacked with JWT authentication and associated route-guard
 in the `src/auth` directory you will be able to see how the authentication is implemented.
 It is basically based on `passport-local` with `JWT` strategy.
 
-Basically, when a login occurs, the user is being authenticated against a hased password using bcrypt, if the passwords match, a token is being generated containing the user data within.
+When a login occurs, the user is being authenticated against a hashed password using bcrypt, if the passwords match, a token is being generated containing the user data within.
 
 When accessing guarded routes (using the UserAuthGuard in the `src/auth/user-auth-guard.ts` file), the token will be decrypted and checked to see if it's valid. If so, the request will pass and a `req.user` property will be filled with currently logged on user.
 
 For example, let's take a look at a guarded route, such as the `/api/profile`.
 
-> TODO: Add correct information
 In the `auth.controller.ts` you can see the following code:
 
 ```typescript
@@ -500,7 +507,7 @@ What about user roles? Each user profile has an array of `roles` which holds str
 
 Let's see how it is implemented.
 
-`api.controller.ts`:
+`src/controllers/api.controller.ts`:
 
 ```typescript
   @UseGuards(UserAuthGuard)
@@ -536,6 +543,34 @@ For example, if you run on production specify:
 
 There is a special configurations for the `test` environment as it starts up a test server on a different
 port and different credentials.
+
+#### Use the configurations
+
+You have two options:
+
+1. Simply default import `src/config.ts`, which exports all of the configurations:
+
+```typescript
+import config from './config';
+
+console.log(`Hello your databse URI is: ${config.DB_URI});
+```
+
+2. You can use the 'NestJS' way by injecting the `ConfigService`:
+
+```typescript
+import { ConfigService } from '../config-manager/config.service.ts';
+
+@Injectable()
+export class MyDatabseService {
+  constructor(private configService: ConfigService) {}
+
+  connect() {
+    this.database.connect(configService.getConfig().DB_URI);
+  }
+}
+
+```
 
 
 ### Testing (Unit Tests\API Tests)
@@ -713,13 +748,18 @@ to start-up the database and the web interface.
 
 You can fire-up the database and the web interface using the following command:
 
-    # This will build web docker image automatically if it does not exist
-    docker-compose up -d
+```bash
+# This will build web docker image automatically if it does not exist
+docker-compose up -d
+```
+
+
 
 You can also build the web image manually like this:
 
-    docker-compose build web
-
+```bash
+docker-compose build web
+```
 
 The environment variable for communication using docker-compose is already included in the `.env` file.
 This `.env` file contains the DB_URI of the database which the web will be able to to access.
@@ -729,19 +769,22 @@ This `.env` file contains the DB_URI of the database which the web will be able 
 
 In order to build the docker image without docker-compose, you can simply run the following command:
 
-    docker build -t my-docker-image:0.0.0 .
+```bash
+  docker build -t my-docker-image:0.0.0 .
+```
 
 And in order to run your docker on port 8080 simply run the following command:
-
-    docker run -p 8080:3000 -itd my-docker-image:0.0.0
+```bash
+docker run -p 8080:3000 -itd my-docker-image:0.0.0
+```
 
 Or you can simply use docker compose:
 
-    docker-compose up
-
+```bash
+docker-compose up
+```
 
 This will run your container on port 3000.
-
 
 ### The build script (build.sh)
 
@@ -775,14 +818,17 @@ You can remove this set of code if you don't want it to take place at all.
 
 In order to run the server as standalone, simply compile it:
 
-    npm run build:nest
+```bash
+npm run build:nest
+```
 
 The output will be projected into the `dist` directory.
 
 ### Angular as standalone
 
 In order to run angular as a standalone, simply compile it:
-
-    npm run build:angular
+```bash
+npm run build:angular
+```
 
 The output will be projected into the `angular-src/dist` directory.
