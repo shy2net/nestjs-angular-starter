@@ -1,0 +1,7 @@
+{
+    "LOG_LEVEL": "info",
+    "USE_SSR": false,
+    "ANGULAR": {
+        "MOUNT": "false"
+    }
+}
