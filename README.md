@@ -40,7 +40,7 @@
 
 # Remarks
 
-> This is the new ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which was based on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular.
+> This is the new starter template, which is based on the deprecated ["nodejs-angular-starter"](https://github.com/shy2net/nodejs-angular-starter) which is built on [TS.ed](https://tsed.io/). The reason the old library was deprecated is because NestJS is more documented and popular library, which has very much the same approach as Angular.
 
 > This template is based on the exact same code for Angular, and most of the original template node code was reused and refactored to suit NestJS approach.
 
