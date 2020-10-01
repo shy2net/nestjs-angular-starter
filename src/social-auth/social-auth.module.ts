@@ -15,7 +15,7 @@ import { SocialAuthService } from './social-auth.service';
   providers: [SocialAuthService],
 })
 export class SocialAuthModule {
-  static withConfig(config: SocialAuthModuleConfig): DynamicModule {
+  static register(config: SocialAuthModuleConfig): DynamicModule {
     return {
       module: SocialAuthModule,
       providers: [{ provide: 'SOCIAL_AUTH_MODULE_CONFIG', useValue: config }],

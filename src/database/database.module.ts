@@ -25,7 +25,7 @@ export class DatabaseModule {
    * and ignore all configurations.
    * @param config
    */
-  static async withConfig(
+  static async register(
     config: DatabaseModuleConfig,
   ): Promise<DynamicModule> {
     // If we are running on test, return the test module

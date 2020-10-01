@@ -8,7 +8,7 @@ import * as path from 'path';
  */
 import { Logger } from '@nestjs/common';
 
-import { parseConfig } from './config-parser';
+import { parseConfig } from './config-manager/config-parser';
 import { getEnvConfig } from './misc/env-config-loader';
 import { AppConfig } from './models';
 
