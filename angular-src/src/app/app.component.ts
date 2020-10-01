@@ -1,7 +1,3 @@
-import 'bootstrap';
-
-import $ from 'jquery';
-
 import { isPlatformBrowser } from '@angular/common';
 import { APP_ID, Component, Inject, PLATFORM_ID } from '@angular/core';
 import {
@@ -9,6 +5,10 @@ import {
 } from '@angular/router';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { AppService } from '@services';
+
+// Quick hack, because importing jquery with bootstrap makes issues with SSR, we use this alternative
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare let $: any;
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,7 @@ export class AppComponent {
     private loadingBarService: LoadingBarService,
     public appService: AppService,
     @Inject(PLATFORM_ID) private platformId: unknown,
-    @Inject(APP_ID) private appId: string
+    @Inject(APP_ID) private appId: string,
   ) {
     if (isPlatformBrowser(platformId))
       this.router.events.subscribe(this.navigationInterceptor.bind(this));
