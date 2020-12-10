@@ -103,6 +103,7 @@ This will give permission to run all required scripts to work with this template
 
 To work with this template **locally (debug mode)**, follow these commands:
 
+    npm i -g @angular/cli # Install angular globally (some scripts depend on ng to be globally installed)
     npm run install:all # Install all dependencies required for both NodeJS and Angular
     npm run start:dev # Run the NodeJS on debug mode
     npm run angular # Run Angular

@@ -14,7 +14,7 @@ check_errcode() {
 echo "Copying configuration files..."
 rm -rf ./dist/src/config
 check_errcode "Failed to delete config files!"
-mkdir ./dist/src/config
+mkdir -p ./dist/src/config
 check_errcode "Failed to create configuration directory at dist!"
 cp -Rf ./src/config/* ./dist/src/config
 check_errcode "Failed to copy configuration files!"
