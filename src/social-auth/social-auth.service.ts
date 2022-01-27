@@ -9,6 +9,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 
 import { UserProfile } from '../../shared/models';
+import appConfig from '../config';
 import { IUserProfileDbModel, UserProfileDbModel } from '../database/models/user-profile.db.model';
 import { SocialAuthModuleConfig } from './social-auth.models';
 
@@ -23,7 +24,7 @@ export class SocialAuthService {
     adapterHost: HttpAdapterHost,
   ) {
     // Don't do anything on test as there is not instance of express
-    if (process.env.NODE_ENV === 'test') return;
+    if (appConfig.ENVIRONMENT === 'test') return;
 
     // Get the express app in order to initialize social authentication
     const expressApp = adapterHost.httpAdapter.getInstance() as Application;

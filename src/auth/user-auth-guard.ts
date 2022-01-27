@@ -2,6 +2,7 @@ import { ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 
+import appConfig from '../config';
 import { AppRequest } from '../models';
 import { AuthService } from './auth.service';
 
@@ -41,7 +42,7 @@ export class UserAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
   ): Promise<boolean> {
     // If we are on test environment, use 'simplified' authentication
-    if (process.env.NODE_ENV === 'test') {
+    if (appConfig.ENVIRONMENT === 'test') {
       const testUserValidated = await this.validateAndAppendUserForTest(
         context,
       );
