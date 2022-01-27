@@ -69,6 +69,8 @@ export async function getNestApp(): Promise<INestApplication> {
  */
 export async function closeNestApp(): Promise<void> {
   if (nestApp) await nestApp.close();
+  // Cleanup the nest app as we closed it
+  nestApp = null;
 }
 
 /**

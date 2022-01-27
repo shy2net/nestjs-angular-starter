@@ -17,7 +17,7 @@ export class DatabaseTestService
   static instance: DatabaseTestService;
 
   // Create an instance of the in-memory mongo database
-  protected mongoServer = new MongoMemoryServer();
+  protected mongoServer: MongoMemoryServer;
 
   constructor() {
     // Set the instance
@@ -32,7 +32,8 @@ export class DatabaseTestService
    * Sets up the in-memory mongo database, connects to the database and starts the server.
    */
   async connect(): Promise<void> {
-    const uri = await this.mongoServer.getUri();
+    this.mongoServer = await MongoMemoryServer.create();
+    const uri = this.mongoServer.getUri();
     await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
