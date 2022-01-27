@@ -12,7 +12,7 @@ module.exports = {
   package: './package.json',
   reporter: 'spec',
   slow: 75,
-  timeout: 8000,
+  timeout: 4000,
   ui: 'bdd',
   exit: true,
   fullTrace: true,
