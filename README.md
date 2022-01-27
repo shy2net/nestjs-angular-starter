@@ -56,7 +56,7 @@ Technologies used in this template:
 
 - Angular 10 (with SSR) - including unit tests (based on Jasmine + Karma)
 - NodeJS express typescript (with SSL support) based on [NestJS](https://nestjs.com/) - for easier express setup using decorators
-- Jest for backend testing + API tests
+- Mocha\Chai for backend testing + API tests
 - Environment based configurations
 - Mongoose (with basic user model)
 - Logging (using [NestJS Logger](https://docs.nestjs.com/techniques/logger))
@@ -211,7 +211,7 @@ It comes with the following features:
 - Configuration according to environment (using [config npm package](https://www.npmjs.com/package/config)).
 - Logging (using built-in NestJS logger).
 - Social Authentication, which basically gets an access token from the client that logged into a service and then creates a user associated with it.
-- Unit testing using Jest.
+- Unit testing using Mocha\Chai.
 
 The code of NodeJS is stored under the `src` directory.
 Output directory of the compiled typescript will be available in the `dist` directory.
@@ -576,7 +576,7 @@ export class MyDatabseService {
 
 ### Testing (Unit Tests\API Tests)
 
-This template comes with Jest integrated.
+This template comes with Mocha\Chai integrated.
 
 There are tests for all of the following:
 

@@ -1,10 +1,12 @@
+import { expect } from 'chai';
+
 import { getEnvConfig } from './env-config-loader';
 
 describe('EnvConfigLoader', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let originalEnv: any;
 
-  beforeAll(() => {
+  before(() => {
     // Store the original environment variables of .env
     originalEnv = process.env;
   });
@@ -13,7 +15,7 @@ describe('EnvConfigLoader', () => {
     process.env = {};
   });
 
-  afterAll(() => {
+  after(() => {
     // Restore the original environment variables of .env
     process.env = originalEnv;
   });
@@ -24,8 +26,8 @@ describe('EnvConfigLoader', () => {
 
     const extractedConfigs = getEnvConfig();
 
-    expect(extractedConfigs['CLIENT_URL']).toBe('http://custom-client.url');
-    expect(extractedConfigs['DB_URI']).toBe('my-custom-uri');
+    expect(extractedConfigs['CLIENT_URL']).eq('http://custom-client.url');
+    expect(extractedConfigs['DB_URI']).eq('my-custom-uri');
   });
 
   it('should return JWT environment variables (non-primitive types)', () => {
@@ -40,6 +42,6 @@ describe('EnvConfigLoader', () => {
 
     const extractedConfigs = getEnvConfig();
 
-    expect(extractedConfigs['JWT']).toEqual(jwtObject);
+    expect(extractedConfigs['JWT']).to.deep.equal(jwtObject);
   });
 });

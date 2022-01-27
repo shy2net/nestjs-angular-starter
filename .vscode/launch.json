@@ -24,13 +24,12 @@
             "preLaunchTask": "npm: copy:essentials"
         },
         {
-            "name": "Debug Jest Tests",
+            "name": "Debug Mocha Tests",
             "type": "node",
             "request": "launch",
             "runtimeArgs": [
                 "--inspect-brk",
-                "${workspaceRoot}/node_modules/.bin/jest",
-                "--runInBand"
+                "${workspaceRoot}/node_modules/.bin/mocha"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",

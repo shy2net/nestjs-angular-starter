@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { LoginResponse, UserProfile } from 'shared';
 
 import { generateMockUser } from '../../shared/testing/mock/user.mock';
@@ -5,9 +6,9 @@ import { cleanTestDB } from '../testing/test_db_setup';
 import { closeNestApp, getNestApp, getRequest, setAdminHeaders } from '../testing/test_utils';
 
 describe('AuthController', () => {
-  beforeAll(getNestApp);
+  before(getNestApp);
   beforeEach(cleanTestDB);
-  afterAll(closeNestApp);
+  after(closeNestApp);
 
   it('/login (POST) should login as root and obtain a token', async () => {
     const response = await (await getRequest())
@@ -18,11 +19,11 @@ describe('AuthController', () => {
     const result = response.body as LoginResponse;
 
     // Check that the token looks fine
-    expect(typeof result.token).toBe('string');
-    expect(result.token.length).toBeGreaterThan(0);
+    expect(typeof result.token).to.equal('string');
+    expect(result.token.length).to.be.greaterThan(0);
 
     // Check that the user if fine
-    expect(result.user.email).toBe('root@mail.com');
+    expect(result.user.email).to.eq('root@mail.com');
   });
 
   it('/login (POST) should fail to login as root with an invalid password', async () => {
@@ -45,7 +46,7 @@ describe('AuthController', () => {
     const result: UserProfile = response.body;
 
     // Check that we obtained the correct user by it's email address
-    expect(result.email).toBe('root@mail.com');
+    expect(result.email).to.eq('root@mail.com');
   });
 
   it('/profile (GET) should fail to return a user profile because no credentials provided', async () => {
@@ -70,8 +71,12 @@ describe('AuthController', () => {
     // Remove the password field for compare
     delete testUser.password;
 
+    // Delete fields that are interrupting
+    delete returnedUser['_id'];
+    delete returnedUser['__v'];
+
     // Now check if the returned user is the same as the created test user
-    expect(returnedUser).toEqual(expect.objectContaining(testUser));
+    expect(returnedUser).to.deep.eq(testUser);
   });
 
   it('/register (POST) should fail to register a new user because one field is not valid', async () => {

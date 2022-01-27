@@ -4,9 +4,9 @@ import {
 } from '../testing/test_utils';
 
 describe('ApiController', () => {
-  beforeAll(getNestApp);
+  before(getNestApp);
   beforeEach(cleanTestDB);
-  afterAll(closeNestApp);
+  after(closeNestApp);
 
   it('/test (GET) should return status ok', async () => {
     await (await getRequest())
