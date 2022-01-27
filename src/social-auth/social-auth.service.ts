@@ -5,7 +5,7 @@ import * as FacebookTokenStrategy from 'passport-facebook-token';
 import { Strategy as GoogleTokenStrategy } from 'passport-google-token';
 import * as randomstring from 'randomstring';
 
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 
 import { UserProfile } from '../../shared/models';
@@ -26,11 +26,25 @@ export class SocialAuthService {
     // Don't do anything on test as there is not instance of express
     if (appConfig.ENVIRONMENT === 'test') return;
 
-    // Get the express app in order to initialize social authentication
-    const expressApp = adapterHost.httpAdapter.getInstance() as Application;
+    let expressApp: Application;
 
-    // Now initialize the social authentication
-    this.init(expressApp);
+    try {
+      // Get the express app in order to initialize social authentication
+      expressApp = adapterHost.httpAdapter.getInstance() as Application;
+    } catch (error) {
+      // Fail with an error but continue
+      Logger.error(error);
+    }
+
+    if (!expressApp)
+      // TODO: This should throw an error instead
+      Logger.warn(
+        "Social authentication is not supported, couldn't get handle of express!",
+      );
+    else {
+      // Now initialize the social authentication
+      this.init(expressApp);
+    }
   }
 
   private init(express: Application): void {

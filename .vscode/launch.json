@@ -31,6 +31,9 @@
                 "--inspect-brk",
                 "${workspaceRoot}/node_modules/.bin/mocha"
             ],
+            "env": {
+                "NODE_ENV": "test-verbose"
+            },
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "port": 9229
