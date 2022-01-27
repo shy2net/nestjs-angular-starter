@@ -35,9 +35,11 @@ jobs:
       - run: npm run install:all
         # Forces mongo-memory-server to be installed
       - run: npm install mongodb-memory-server
+        # Run backend tests
       - run: npm run test:ci
+        # Run frontend tests
       - run: npm run ng:test:ci
-      - name: Test Report
+      - name: Generate backend test report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
         with:
