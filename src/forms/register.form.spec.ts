@@ -1,3 +1,5 @@
+import { expect } from 'chai';
+
 import { UserProfile } from '../../shared/models';
 import { generateMockUser } from '../../shared/testing/mock/user.mock';
 import { RegisterForm } from './register.form';
@@ -6,7 +8,7 @@ describe('RegisterForm', () => {
   let user: UserProfile;
   let registerForm: RegisterForm;
 
-  beforeAll(async () => {
+  before(async () => {
     user = generateMockUser();
 
     // Setup a static password for testing
@@ -19,7 +21,7 @@ describe('RegisterForm', () => {
 
   it('should return a hashed password', async () => {
     const result = await registerForm.getHashedPassword();
-    expect(typeof result).toBe('string');
-    expect(result.length).toBe(60);
+    expect(typeof result).to.eq('string');
+    expect(result.length).to.eq(60);
   });
 });

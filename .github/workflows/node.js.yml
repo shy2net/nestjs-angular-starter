@@ -35,9 +35,14 @@ jobs:
       - run: npm run install:all
         # Forces mongo-memory-server to be installed
       - run: npm install mongodb-memory-server
-      - run: npm test
+        # Run backend tests
+      - run: npm run test:ci
+        # Run frontend tests
       - run: npm run ng:test:ci
-      - uses: ashley-taylor/junit-report-annotations-action@1.3
-        if: always()
+      - name: Generate backend test report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
         with:
-            access-token: ${{ secrets.GITHUB_TOKEN }}
+          name: Backend Tests Report # Name of the check run which will be created
+          path: test-results.json    # Path to test results
+          reporter: mocha-json        # Format of test results

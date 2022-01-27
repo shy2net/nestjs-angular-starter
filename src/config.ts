@@ -12,9 +12,38 @@ import { parseConfig } from './config-manager/config-parser';
 import { getEnvConfig } from './misc/env-config-loader';
 import { AppConfig } from './models';
 
-process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '/config');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const config = require('config');
+let config: AppConfig;
+let ENVIRONMENT = process.env['NODE_ENV'] || 'development';
+
+function loadEnvironmentAndConfigurations() {
+  let isVerboseTest = false;
+
+  // if it's a 'test-verbose' environment (where we print all logs as usual)
+  if (process.env.NODE_ENV === 'test-verbose') {
+    // Set the env as 'test' just for the configurations from 'config/test.json' to be loaded correctly
+    process.env.NODE_ENV = 'test';
+    isVerboseTest = true;
+  }
+
+  // The directory where all of the configurations are stored
+  process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '/config');
+
+  // Now load all of the configurations using the 'config' library
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  config = require('config');
+
+  // If it's a verbose test, return the NODE_ENV to the correct one
+  if (isVerboseTest) {
+    process.env.NODE_ENV = 'verbose-test';
+
+    // Special 'test-verbose' case where test is still treated in code but output is still being generated
+    // (NestJS by default hides all output if 'test' environment is being set)
+    ENVIRONMENT = 'test';
+  }
+}
+
+loadEnvironmentAndConfigurations();
+
 let exportedConfig = config as AppConfig;
 
 /*
@@ -39,8 +68,6 @@ const CORS_OPTIONS: cors.CorsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   credentials: true,
 };
-
-const ENVIRONMENT = process.env['NODE_ENV'] || 'development';
 
 exportedConfig = {
   ...exportedConfig,

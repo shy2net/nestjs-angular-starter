@@ -8,6 +8,8 @@
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
+    "types": ["reflect-metadata", "node", "mocha", "chai"],
+    "typeRoots": ["./node_modules/@types"],
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true

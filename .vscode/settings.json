@@ -1,4 +1,10 @@
 {
+    "mochaExplorer.files": "src/**/*.spec.ts",
+    "mochaExplorer.ignore": "angular-src/**/*",
+    "mochaExplorer.env": {
+        "NODE_ENV": "test"
+    },
+    "mochaExplorer.pruneFiles": true,
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

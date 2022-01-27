@@ -1,5 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 
+import appConfig from '../config';
 import { DatabaseService } from './database.service';
 
 export interface DatabaseModuleConfig {
@@ -25,11 +26,9 @@ export class DatabaseModule {
    * and ignore all configurations.
    * @param config
    */
-  static async register(
-    config: DatabaseModuleConfig,
-  ): Promise<DynamicModule> {
+  static async register(config: DatabaseModuleConfig): Promise<DynamicModule> {
     // If we are running on test, return the test module
-    if (process.env.NODE_ENV === 'test') return DatabaseModule.forTest();
+    if (appConfig.ENVIRONMENT === 'test') return DatabaseModule.forTest();
 
     return {
       module: DatabaseModule,

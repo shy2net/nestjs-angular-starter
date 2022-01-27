@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "compulim.vscode-mocha",
+        "spoonscen.es6-mocha-snippets",
+        "hbenl.vscode-mocha-test-adapter"
+    ]
+}
