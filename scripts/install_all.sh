@@ -9,7 +9,7 @@ function install_deps() {
     if [ $CI ]; then
         echo "Running CI, skipping postinstall scripts..."
         # Install prod dependencies and run postinstall script if exists
-        npm install --only=prod --ignore-scripts
+        npm ci --only=prod --ignore-scripts
     else
         # Install prod dependencies and run postinstall script if exists
         npm install --only=prod

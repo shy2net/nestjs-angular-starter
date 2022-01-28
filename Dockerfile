@@ -20,10 +20,12 @@ WORKDIR /compile
 RUN echo "NODE_ENV for build was set to: ${NODE_ENV}, starting build..." \
     && apk add --no-cache bash
 
-# Copy only package.json files for node_modules installationת
+# Copy package.json and package-lock.json files for node_modules installation
 # This allows caching take place
 COPY ./package.json ./package.json
+COPY ./package-lock.json ./package-lock.json
 COPY ./angular-src/package.json ./angular-src/package.json
+COPY ./angular-src/package-lock.json ./angular-src/package-lock.json
 
 # Copy the scripts directory
 COPY ./scripts ./scripts
