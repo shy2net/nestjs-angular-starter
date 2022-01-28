@@ -17,7 +17,7 @@
     "start:dev": "npm run copy:essentials && nest start --watch",
     "copy:essentials": "bash ./scripts/copy-essentials.sh",
     "ng:test": "cd ./angular-src && ./node_modules/.bin/ng test",
-    "ng:test:ci": "export IS_CI=true; cd ./angular-src && ./node_modules/.bin/ng test --no-watch --no-progress --browsers=Headless_Chrome",
+    "ng:test:ci": "cross-env IS_CI=true; cd ./angular-src && ./node_modules/.bin/ng test --no-watch --no-progress --browsers=Headless_Chrome",
     "ng:e2e": "cd ./angular-src && ./node_modules/.bin/ng e2e",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:verbose": "cross-env NODE_ENV=test-verbose mocha",

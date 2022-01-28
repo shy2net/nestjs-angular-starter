@@ -32,11 +32,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm run install:all
+        # Install backend dependencies
+      - run: npm ci --ignore-scripts
         # Forces mongo-memory-server to be installed
       - run: npm install mongodb-memory-server
         # Run backend tests
       - run: npm run test:ci
+        # Install frontend dependencies
+      - run: cd angular-src && npm ci --ignore-scripts
         # Run frontend tests
       - run: npm run ng:test:ci
       - name: Generate backend test report

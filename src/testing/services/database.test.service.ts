@@ -1,3 +1,6 @@
+// We use the @tsignore syntax, to skip compilation error when building for production using 'docker build'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as mongoose from 'mongoose';
 
