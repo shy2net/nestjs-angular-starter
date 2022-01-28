@@ -1,16 +1,19 @@
 #!/bin/bash
 
-# Install all of the dependencies, including the development and productin
+# Install all of the dependencies, including the development and production
 function install_deps() {
-    # Install dev depdendencies but ignore postinstall script
-    npm install --only=dev --ignore-scripts
-
     # If we are running on CI, don't run postinstall
     if [ $CI ]; then
         echo "Running CI, skipping postinstall scripts..."
-        # Install prod dependencies and run postinstall script if exists
+        # Install dev depdendencies but ignore postinstall script
+        npm ci --only=dev --ignore-scripts
+
+        # Install prod dependencies but postinstall script if exists
         npm ci --only=prod --ignore-scripts
     else
+        # Install dev depdendencies but ignore postinstall script
+        npm install --only=dev --ignore-scripts
+
         # Install prod dependencies and run postinstall script if exists
         npm install --only=prod
     fi
