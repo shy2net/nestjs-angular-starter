@@ -74,7 +74,7 @@
     "eslint-plugin-import": "^2.20.1",
     "faker": "^5.1.0",
     "mocha": "^9.2.0",
-    "mongodb-memory-server": "^8.2.0",
+    "mongodb-memory-server": "^6.8.0",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-loader": "^6.2.1",
