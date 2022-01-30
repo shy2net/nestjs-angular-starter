@@ -63,5 +63,9 @@ COPY --from=build /app .
 # Expose the port required for web (http and https)
 EXPOSE 80 443 3000
 
+# Give the node user permissions to access the /app
+RUN chown -R node /app
+USER node
+
 # Start the built distribution
 CMD [ "npm", "start" ]
