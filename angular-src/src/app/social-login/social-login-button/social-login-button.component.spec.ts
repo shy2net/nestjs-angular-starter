@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { getCommonTestBed } from '../../testing/test_utils';
 import { SocialLoginModule } from '../social-login.module';
@@ -8,11 +8,11 @@ describe('SocialLoginButtonComponent', () => {
   let component: SocialLoginButtonComponent;
   let fixture: ComponentFixture<SocialLoginButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     getCommonTestBed([SocialLoginButtonComponent], [SocialLoginModule]).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(SocialLoginButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

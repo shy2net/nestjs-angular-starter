@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { getCommonTestBed } from '../../testing/test_utils';
@@ -21,11 +21,11 @@ describe('LoginComponent', () => {
     passInput.dispatchEvent(new Event('input'));
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     getCommonTestBed([LoginComponent], [FormsModule]).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
