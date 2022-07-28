@@ -12,10 +12,10 @@ function install_deps() {
         npm ci --only=prod --ignore-scripts
     else
         # Install dev depdendencies but ignore postinstall script
-        npm install --only=dev
+        npm ci --only=dev
 
         # Install prod dependencies and run postinstall script if exists
-        npm install --only=prod
+        npm ci --only=prod
     fi
 }
 
