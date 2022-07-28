@@ -37,7 +37,7 @@ export function middlewareToPromise(
   req: AppRequest,
   res?: AppResponse,
 ): Promise<unknown> {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     middlewareFunc(req, res, err => {
       if (err) throw err;
       resolve();
