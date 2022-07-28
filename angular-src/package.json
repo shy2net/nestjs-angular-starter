@@ -15,8 +15,7 @@
     "dev:ssr": "ng run angular-src:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
     "build:ssr": "ng build --configuration production && ng run angular-src:server:production",
-    "prerender": "ng run angular-src:prerender",
-    "postinstall": "./node_modules/.bin/ngcc --tsconfig=src/tsconfig.app.json"
+    "prerender": "ng run angular-src:prerender"
   },
   "private": true,
   "dependencies": {
