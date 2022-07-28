@@ -2,7 +2,7 @@
 ARG workdir=/app
 ARG NODE_ENV=development
 
-FROM node:12.18.1-alpine3.11 as base
+FROM node:14.20-alpine3.15 as base
 
 # Configure environment variables
 ENV NODE_ENV ${NODE_ENV}

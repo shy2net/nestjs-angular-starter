@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
 import * as express from 'express';
 import { existsSync } from 'fs';

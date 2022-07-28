@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AppService } from '../../core/services/app.service';
 import { getCommonTestBed } from '../../testing/test_utils';
@@ -12,7 +12,7 @@ describe('UserPageComponent', () => {
 
   let heading: HTMLElement;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     getCommonTestBed([UserPageComponent], []).compileComponents();
   }));
 

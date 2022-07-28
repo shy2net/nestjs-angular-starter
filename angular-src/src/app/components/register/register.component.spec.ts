@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import {
@@ -34,11 +34,11 @@ describe('RegisterComponent', () => {
     );
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     getCommonTestBed([RegisterComponent], [FormsModule]).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

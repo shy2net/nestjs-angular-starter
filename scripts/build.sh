@@ -39,7 +39,7 @@ echo "Starting to configure Angular app..."
 pushd angular-src
 
 echo "Building Angular app for $ENV..."
-./node_modules/.bin/ng build --aot --prod --configuration $ENV
+./node_modules/.bin/ng build --aot --configuration $ENV
 check_errcode "Failed to build angular! stopping script!"
 
 # TODO: Remove this 'if' statment until the 'fi' if you don't want SSR at all

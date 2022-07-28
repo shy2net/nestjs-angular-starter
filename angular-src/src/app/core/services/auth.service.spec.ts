@@ -1,13 +1,13 @@
 import { CookieService } from 'ngx-cookie';
 
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { getCommonTestBed } from '../../testing/test_utils';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     getCommonTestBed([]).compileComponents();
     service = TestBed.inject(AuthService);
 

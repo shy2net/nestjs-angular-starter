@@ -6,7 +6,7 @@
     - [On Linux](#on-linux)
 - [Starting with this template](#starting-with-this-template)
 - [Template architecture](#template-architecture)
-  - [Angular 10](#angular-10)
+  - [Angular 14](#angular-14)
     - [Angular services & providers](#angular-services--providers)
     - [Angular components](#angular-components)
     - [Angular Universal (Server-Side-Rendering)](#angular-universal-server-side-rendering)
@@ -122,9 +122,9 @@ These list of commands will install, compile and run the output NodeJS.
 
 The template comes with a ready to go server and client integration, authentication and basic styling.
 
-## Angular 10
+## Angular 14
 
-Angular 10 comes with the following features:
+Angular 14 comes with the following features:
 
 - Bootstrap v4 with header and sticky footer.
 - Built in SSR bundled with the api server.
