@@ -18,7 +18,7 @@ WORKDIR /compile
 # Add bash support to alpine
 # Read this guide for more info: https://www.cyberciti.biz/faq/alpine-linux-install-bash-using-apk-command/
 RUN echo "NODE_ENV for build was set to: ${NODE_ENV}, starting build..." \
-    && apk add --no-cache bash
+    && apk add --no-cache bash python2 make gcc g++
 
 # Copy package.json and package-lock.json files for node_modules installation
 # This allows caching take place

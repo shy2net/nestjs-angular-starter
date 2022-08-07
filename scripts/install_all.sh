@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function install_deps() {
-    npm ci
+    npm ci --include=dev
 }
 
 echo "Installing all dependencies for NodeJS & Angular..."
