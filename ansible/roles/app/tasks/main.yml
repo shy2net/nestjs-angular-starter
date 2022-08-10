@@ -1,0 +1,22 @@
+---
+- name: Create user 'deployment'
+  user:
+    name: deployment
+    comment: User for app deployment
+    group: docker
+  become: yes
+
+- name: Clone app
+  # Make sure the deployment user the access key generated (ssh-keygen)
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ app_dir }}'
+  become: yes
+  become_user: deployment
+
+- name: Start app
+  docker_compose:
+    project_src: '{{ app_dir }}'
+    state: present
+  become: yes
+  become_user: deployment

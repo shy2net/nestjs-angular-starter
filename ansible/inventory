@@ -1,0 +1,3 @@
+[all]
+
+main    ansible_host=yourownwebsite.com

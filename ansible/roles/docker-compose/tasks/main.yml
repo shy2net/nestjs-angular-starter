@@ -1,0 +1,4 @@
+# Installs Docker-Compose
+---
+- include_tasks: install_docker_with_compose.yml
+  tags: install_docker_with_compose
