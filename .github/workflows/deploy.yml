@@ -1,0 +1,52 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker image
+        run: |
+          # Build the docker image
+          docker-compose build web
+
+          # Get the tag
+          version=$(node ./scripts/get-version.js)
+
+          # Now tag the existing image
+          docker tag webapp:latest $version
+
+          # Now save the image
+          docker save -o webapp.tar webapp:latest
+
+      - name: Copy the docker image to the server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          source: webapp.tar
+          target: /tmp/
+
+      - name: Load the docker image and reload the app
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+
+          script: |
+            docker load -i /tmp/webapp.tar
+            rm /tmp/webapp.tar
+            cd ~/app
+            docker-compose rm -f web || true
+            docker-compose up -d web
