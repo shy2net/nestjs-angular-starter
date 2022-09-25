@@ -36,6 +36,9 @@
   - [Separating client and server](#separating-client-and-server)
     - [Server as standalone](#server-as-standalone)
     - [Angular as standalone](#angular-as-standalone)
+  - [Deploying our app on a new server using Ansible](#deploying-our-app-on-a-new-server-using-ansible)
+    - [Configuring Ansible for the first time](#configuring-ansible-for-the-first-time)
+    - [Deploying our infrastructure](#deploying-our-infrastructure)
 
 
 # Remarks
@@ -65,7 +68,7 @@ Technologies used in this template:
 - Social Authentication (Google and Facebook)
 - Form validations using ([class-validator](https://www.npmjs.com/package/class-validator)), shared between server and client
 - Docker support based on alpine and node 12
-
+- Support for Ansible to deploy our app easier
 
 ## Prerequisites
 
@@ -833,3 +836,29 @@ npm run build:angular
 ```
 
 The output will be projected into the `angular-src/dist` directory.
+
+## Deploying our app on a new server using Ansible
+
+Ansible is a utility that allows us to deploy our server easily, it will install the required
+dependencies (such as docker, docker-compose), clone our project and start the app.
+
+The built-in Ansible playbook provided currently only supports CentOS\Redhat.
+
+### Configuring Ansible for the first time
+
+Before we can start working with Ansible, we need to make sure the following:
+
+- First make sure you have Ansible installed on your computer and that the command `ansible` is available.
+- Create a server running either Centos\Redhat, save the IP of the server.
+- Edit the `ansible/inventory` file with the updated IP address of our server.
+- Open up the `ansible/ansible.cfg` and make sure it points to the correct SSH key. If you are using username\password please read the official Ansible docs on how to configure that.
+- Edit the `ansible/main.yml` file to point to the correct Github repository.
+
+### Deploying our infrastructure
+
+Now that everything is configured and ready, simply run the following command:
+
+```bash
+# Run the main playbook
+ansible-playbook main.yml
+```
