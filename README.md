@@ -28,10 +28,10 @@
   - [Sharing code (models, interfaces, etc)](#sharing-code-models-interfaces-etc)
   - [Form validations](#form-validations)
 - [Running on production](#running-on-production)
-  - [Running Angular and NodeJS on the same server](#running-angular-and-nodejs-on-the-same-server)
-    - [Docker\Docker-Compose](#dockerdocker-compose)
-      - [Docker-compose](#docker-compose)
-      - [Docker image build](#docker-image-build)
+  - [The easiest way to run on production - Docker\Docker-Compose](#the-easiest-way-to-run-on-production---dockerdocker-compose)
+    - [Docker-compose](#docker-compose)
+    - [Docker image build](#docker-image-build)
+  - [Building and compiling the code manually](#building-and-compiling-the-code-manually)
     - [The build script (build.sh)](#the-build-script-buildsh)
   - [Separating client and server](#separating-client-and-server)
     - [Server as standalone](#server-as-standalone)
@@ -707,16 +707,70 @@ For example, when registering a user validations takes place in this way:
 
 # Running on production
 
+## The easiest way to run on production - Docker\Docker-Compose
+
+This template comes ready with Dockerfile based on node:12.18.1-alpine3.11 docker image.
+
+It also comes with a ready out of the box docker-compose.yml file which can be used
+to start-up the database and the web interface as easy as a command.
+
+
+### Docker-compose
+
+You can fire-up the database and the web interface using the following command:
+
+```bash
+# This will build web docker image automatically if it does not exist
+docker-compose up -d
+```
+
+You can also build the web image manually like this:
+
+```bash
+docker-compose build web
+```
+
+The environment variable for communication using docker-compose is already included in the `.env` file.
+This `.env` file contains the DB_URI of the database which the web will be able to to access.
+
+In order for the usual ports (443 and 80) to work we are using Nginx as a reverse proxy.
+
+Nginx will startup as a docker microservice (listed under the docker-compose) listening to port 443 and 80. All traffic will by default redirect to port 80 to HTTPS (port 443) using Nginx. Nginx will act as a reverse proxy and all traffic will be redirected to the web microservice.
+
+Make sure to edit the `nginx.conf` file to the correct domain urls.
+
+### Docker image build
+
+In order to build the docker image without docker-compose, you can simply run the following command:
+
+```bash
+  docker build -t my-docker-image:0.0.0 .
+```
+
+And in order to run your docker on port 8080 simply run the following command:
+
+```bash
+docker run -p 8080:3000 -itd my-docker-image:0.0.0
+```
+
+Or you can simply use docker compose:
+
+```bash
+docker-compose up
+```
+
+This will run your container on port 3000.
+
 In order to run this code on production, you must first compile it.
 There a few things to take into consideration:
 
-## Running Angular and NodeJS on the same server
+## Building and compiling the code manually
 
 This template comes with Angular and NodeJS bundled together and can
 be up and running together on the same NodeJS server. This takes place using the `build.sh` bash script
 that knows how to compile them together and bundle them.
 
-How does it work? Well it simply compiles each one seperatly and then copies the angular-src output dist directory
+How does it work? Well it simply compiles each one separately and then copies the angular-src output dist directory
 into the NodeJS src directory and delievers them in the `src/server.ts` like this:
 
 ```typescript
@@ -738,57 +792,6 @@ When building your image for production it should contain the following commands
 And to run this code simple:
 
     npm start
-
-
-### Docker\Docker-Compose
-
-This template comes ready with Dockerfile based on node:12.18.1-alpine3.11 docker image.
-
-It also comes with a ready out of the box docker-compose.yml file which can be used
-to start-up the database and the web interface.
-
-
-#### Docker-compose
-
-You can fire-up the database and the web interface using the following command:
-
-```bash
-# This will build web docker image automatically if it does not exist
-docker-compose up -d
-```
-
-
-
-You can also build the web image manually like this:
-
-```bash
-docker-compose build web
-```
-
-The environment variable for communication using docker-compose is already included in the `.env` file.
-This `.env` file contains the DB_URI of the database which the web will be able to to access.
-
-
-#### Docker image build
-
-In order to build the docker image without docker-compose, you can simply run the following command:
-
-```bash
-  docker build -t my-docker-image:0.0.0 .
-```
-
-And in order to run your docker on port 8080 simply run the following command:
-```bash
-docker run -p 8080:3000 -itd my-docker-image:0.0.0
-```
-
-Or you can simply use docker compose:
-
-```bash
-docker-compose up
-```
-
-This will run your container on port 3000.
 
 ### The build script (build.sh)
 
@@ -831,6 +834,7 @@ The output will be projected into the `dist` directory.
 ### Angular as standalone
 
 In order to run angular as a standalone, simply compile it:
+
 ```bash
 npm run build:angular
 ```
