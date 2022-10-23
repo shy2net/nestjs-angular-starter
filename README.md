@@ -30,6 +30,7 @@
 - [Running on production](#running-on-production)
   - [The easiest way to run on production - Docker\Docker-Compose](#the-easiest-way-to-run-on-production---dockerdocker-compose)
     - [Docker-compose](#docker-compose)
+    - [Nginx as reverse proxy](#nginx-as-reverse-proxy)
     - [Docker image build](#docker-image-build)
   - [Building and compiling the code manually](#building-and-compiling-the-code-manually)
     - [The build script (build.sh)](#the-build-script-buildsh)
@@ -733,11 +734,14 @@ docker-compose build web
 The environment variable for communication using docker-compose is already included in the `.env` file.
 This `.env` file contains the DB_URI of the database which the web will be able to to access.
 
+
+### Nginx as reverse proxy
+
 In order for the usual ports (443 and 80) to work we are using Nginx as a reverse proxy.
 
-Nginx will startup as a docker microservice (listed under the docker-compose) listening to port 443 and 80. All traffic will by default redirect to port 80 to HTTPS (port 443) using Nginx. Nginx will act as a reverse proxy and all traffic will be redirected to the web microservice.
+Nginx will startup as a docker microservice (listed under the docker-compose) listening to port 443 and 80. All traffic will be redirected from port 80 to HTTPS (port 443) using Nginx. Nginx will act as a reverse proxy pointing to our web service.
 
-Make sure to edit the `nginx.conf` file to the correct domain urls.
+Make sure to edit the `nginx.conf` file to the correct domain urls, also update the `certs` directory with the correct SSL certificates (can be freely generated using `certbot` utility).
 
 ### Docker image build
 
