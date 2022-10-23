@@ -40,6 +40,9 @@
   - [Deploying our app on a new server using Ansible](#deploying-our-app-on-a-new-server-using-ansible)
     - [Configuring Ansible for the first time](#configuring-ansible-for-the-first-time)
     - [Deploying our infrastructure](#deploying-our-infrastructure)
+  - [Built in CI\CD (Github Actions)](#built-in-cicd-github-actions)
+    - [Server preparations for CD to work](#server-preparations-for-cd-to-work)
+    - [Secrets required for the CD process](#secrets-required-for-the-cd-process)
 
 
 # Remarks
@@ -70,6 +73,8 @@ Technologies used in this template:
 - Form validations using ([class-validator](https://www.npmjs.com/package/class-validator)), shared between server and client
 - Docker support based on alpine and node 12
 - Support for Ansible to deploy our app easier
+- Nginx support as a reverse proxy (with SSL certificates)
+- Complete CI\CD process based on Github Actions
 
 ## Prerequisites
 
@@ -874,3 +879,31 @@ Now that everything is configured and ready, simply run the following command:
 # Run the main playbook
 ansible-playbook main.yml
 ```
+
+## Built in CI\CD (Github Actions)
+
+This template comes pre-packed with tests that automatically run after opening a pull request. Also automatic deployment to your custom server is also taken care of when pushing code to the master branch. You can find the `.github/workflows` directory and see these two files:
+
+- `nodejs.yml` - This file contains the workflow related to the CI process, it runs tests on the frontend and backend on any new pull request.
+
+- `deploy.yml` - This file contain the workflow related to the CD process, it build the docker image, tags it according to the current version, saves it, and then copies it to the dedicated server using SCP. Then, it finally loads the new image to the target server and starts the server again.
+
+
+### Server preparations for CD to work
+
+It is recommended to using Ansible, it will do all of the setup required for the CD process to work later-on. Ansible will setup docker, docker-compose, users and permissions required for login.
+
+If you still prefer doing it manually, first make sure you have the following:
+
+1. Your app cloned and sits at the `~/app` directory.
+2. Docker and Docker-Compose are installed and working correctly.
+3. Permissions are granted for the user which will be connected via SSH. It IS NOT recommended for user `root` to be the one deploying our app. If you are using the Ansible playbook in the project, it will automatically create the `deployment` user for you.
+4. The generated user should be part of the `docker` group in order to run `docker-compose` commands.
+
+### Secrets required for the CD process
+
+In order for the CD process to actually work you have to add the following secrets to the repository:
+
+- SSH_HOST - the hostname\ip address of the target host to deploy the application into.
+- SSH_KEY - the private key file used for authentication with the server.
+- SSH_USERNAME - The username being used for the target server.
