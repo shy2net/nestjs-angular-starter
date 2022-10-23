@@ -28,14 +28,21 @@
   - [Sharing code (models, interfaces, etc)](#sharing-code-models-interfaces-etc)
   - [Form validations](#form-validations)
 - [Running on production](#running-on-production)
-  - [Running Angular and NodeJS on the same server](#running-angular-and-nodejs-on-the-same-server)
-    - [Docker\Docker-Compose](#dockerdocker-compose)
-      - [Docker-compose](#docker-compose)
-      - [Docker image build](#docker-image-build)
+  - [The easiest way to run on production - Docker\Docker-Compose](#the-easiest-way-to-run-on-production---dockerdocker-compose)
+    - [Docker-compose](#docker-compose)
+    - [Nginx as reverse proxy](#nginx-as-reverse-proxy)
+    - [Docker image build](#docker-image-build)
+  - [Building and compiling the code manually](#building-and-compiling-the-code-manually)
     - [The build script (build.sh)](#the-build-script-buildsh)
   - [Separating client and server](#separating-client-and-server)
     - [Server as standalone](#server-as-standalone)
     - [Angular as standalone](#angular-as-standalone)
+  - [Deploying our app on a new server using Ansible](#deploying-our-app-on-a-new-server-using-ansible)
+    - [Configuring Ansible for the first time](#configuring-ansible-for-the-first-time)
+    - [Deploying our infrastructure](#deploying-our-infrastructure)
+  - [Built in CI\CD (Github Actions)](#built-in-cicd-github-actions)
+    - [Server preparations for CD to work](#server-preparations-for-cd-to-work)
+    - [Secrets required for the CD process](#secrets-required-for-the-cd-process)
 
 
 # Remarks
@@ -65,7 +72,9 @@ Technologies used in this template:
 - Social Authentication (Google and Facebook)
 - Form validations using ([class-validator](https://www.npmjs.com/package/class-validator)), shared between server and client
 - Docker support based on alpine and node 12
-
+- Support for Ansible to deploy our app easier
+- Nginx support as a reverse proxy (with SSL certificates)
+- Complete CI\CD process based on Github Actions
 
 ## Prerequisites
 
@@ -704,48 +713,15 @@ For example, when registering a user validations takes place in this way:
 
 # Running on production
 
-In order to run this code on production, you must first compile it.
-There a few things to take into consideration:
-
-## Running Angular and NodeJS on the same server
-
-This template comes with Angular and NodeJS bundled together and can
-be up and running together on the same NodeJS server. This takes place using the `build.sh` bash script
-that knows how to compile them together and bundle them.
-
-How does it work? Well it simply compiles each one seperatly and then copies the angular-src output dist directory
-into the NodeJS src directory and delievers them in the `src/server.ts` like this:
-
-```typescript
-// Point static path to Angular 2 distribution
-this.express.use(express.static(path.join(__dirname, 'dist')));
-
-// Deliever the Angular 2 distribution
-this.express.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
-```
-
-**Take into consideration that it will not work on debug mode.**
-
-When building your image for production it should contain the following commands:
-
-    npm run build # Call the build.sh script to start the build (it also installs the deps required if they do not exist)
-
-And to run this code simple:
-
-    npm start
-
-
-### Docker\Docker-Compose
+## The easiest way to run on production - Docker\Docker-Compose
 
 This template comes ready with Dockerfile based on node:12.18.1-alpine3.11 docker image.
 
 It also comes with a ready out of the box docker-compose.yml file which can be used
-to start-up the database and the web interface.
+to start-up the database and the web interface as easy as a command.
 
 
-#### Docker-compose
+### Docker-compose
 
 You can fire-up the database and the web interface using the following command:
 
@@ -753,8 +729,6 @@ You can fire-up the database and the web interface using the following command:
 # This will build web docker image automatically if it does not exist
 docker-compose up -d
 ```
-
-
 
 You can also build the web image manually like this:
 
@@ -766,7 +740,15 @@ The environment variable for communication using docker-compose is already inclu
 This `.env` file contains the DB_URI of the database which the web will be able to to access.
 
 
-#### Docker image build
+### Nginx as reverse proxy
+
+In order for the usual ports (443 and 80) to work we are using Nginx as a reverse proxy.
+
+Nginx will startup as a docker microservice (listed under the docker-compose) listening to port 443 and 80. All traffic will be redirected from port 80 to HTTPS (port 443) using Nginx. Nginx will act as a reverse proxy pointing to our web service.
+
+Make sure to edit the `nginx.conf` file to the correct domain urls, also update the `certs` directory with the correct SSL certificates (can be freely generated using `certbot` utility).
+
+### Docker image build
 
 In order to build the docker image without docker-compose, you can simply run the following command:
 
@@ -775,6 +757,7 @@ In order to build the docker image without docker-compose, you can simply run th
 ```
 
 And in order to run your docker on port 8080 simply run the following command:
+
 ```bash
 docker run -p 8080:3000 -itd my-docker-image:0.0.0
 ```
@@ -786,6 +769,42 @@ docker-compose up
 ```
 
 This will run your container on port 3000.
+
+In order to run this code on production, you must first compile it.
+There a few things to take into consideration:
+
+## Building and compiling the code manually
+
+This template comes with Angular and NodeJS bundled together and can
+be up and running together on the same NodeJS server. This takes place using the `build.sh` bash script
+that knows how to compile them together and bundle them.
+
+How does it work? Well it simply compiles each one separately and then copies the angular-src output dist directory
+into the NodeJS src directory and delievers them in the `src/server.ts` like this:
+
+```typescript
+// Point static path to Angular 2 distribution
+this.express.use(express.static(path.join(__dirname, 'dist')));
+
+// Deliver the Angular 2 distribution
+this.express.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+```
+
+**Take into consideration that it will not work on debug mode.**
+
+When building your image for production it should contain the following commands:
+
+```bash
+npm run build # Call the build.sh script to start the build (it also installs the deps required if they do not exist)
+```
+
+And to run this code simple:
+
+```bash
+npm start
+```
 
 ### The build script (build.sh)
 
@@ -828,8 +847,63 @@ The output will be projected into the `dist` directory.
 ### Angular as standalone
 
 In order to run angular as a standalone, simply compile it:
+
 ```bash
 npm run build:angular
 ```
 
 The output will be projected into the `angular-src/dist` directory.
+
+## Deploying our app on a new server using Ansible
+
+Ansible is a utility that allows us to deploy our server easily, it will install the required
+dependencies (such as docker, docker-compose), clone our project and start the app.
+
+The built-in Ansible playbook provided currently only supports CentOS\Redhat.
+
+### Configuring Ansible for the first time
+
+Before we can start working with Ansible, we need to make sure the following:
+
+- First make sure you have Ansible installed on your computer and that the command `ansible` is available.
+- Create a server running either Centos\Redhat, save the IP of the server.
+- Edit the `ansible/inventory` file with the updated IP address of our server.
+- Open up the `ansible/ansible.cfg` and make sure it points to the correct SSH key. If you are using username\password please read the official Ansible docs on how to configure that.
+- Edit the `ansible/main.yml` file to point to the correct Github repository.
+
+### Deploying our infrastructure
+
+Now that everything is configured and ready, simply run the following command:
+
+```bash
+# Run the main playbook
+ansible-playbook main.yml
+```
+
+## Built in CI\CD (Github Actions)
+
+This template comes pre-packed with tests that automatically run after opening a pull request. Also automatic deployment to your custom server is also taken care of when pushing code to the master branch. You can find the `.github/workflows` directory and see these two files:
+
+- `nodejs.yml` - This file contains the workflow related to the CI process, it runs tests on the frontend and backend on any new pull request.
+
+- `deploy.yml` - This file contain the workflow related to the CD process, it build the docker image, tags it according to the current version, saves it, and then copies it to the dedicated server using SCP. Then, it finally loads the new image to the target server and starts the server again.
+
+
+### Server preparations for CD to work
+
+It is recommended to using Ansible, it will do all of the setup required for the CD process to work later-on. Ansible will setup docker, docker-compose, users and permissions required for login.
+
+If you still prefer doing it manually, first make sure you have the following:
+
+1. Your app cloned and sits at the `~/app` directory.
+2. Docker and Docker-Compose are installed and working correctly.
+3. Permissions are granted for the user which will be connected via SSH. It IS NOT recommended for user `root` to be the one deploying our app. If you are using the Ansible playbook in the project, it will automatically create the `deployment` user for you.
+4. The generated user should be part of the `docker` group in order to run `docker-compose` commands.
+
+### Secrets required for the CD process
+
+In order for the CD process to actually work you have to add the following secrets to the repository:
+
+- SSH_HOST - the hostname\ip address of the target host to deploy the application into.
+- SSH_KEY - the private key file used for authentication with the server.
+- SSH_USERNAME - The username being used for the target server.

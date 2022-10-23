@@ -1,0 +1,51 @@
+---
+# tasks file for playbooks/roles/python37
+- name: Check if python3.7 installed
+  command: which python3.7
+  ignore_errors: yes
+  register: installed_python
+
+- name: Print python output
+  debug:
+    msg: '{{ installed_python }}'
+
+- name: Setup python3.7
+  block:
+    - name: Set variables
+      set_fact:
+        install_path: '/tmp/python3.7'
+
+    - name: Install required deps
+      yum:
+        name:
+          - gcc
+          - openssl-devel
+          - bzip2-devel
+          - libffi-devel
+          - zlib-devel
+          - xz-devel
+        state: present
+
+      become: yes
+
+    - name: Download Python 3.7
+      get_url:
+        url: https://www.python.org/ftp/python/3.7.11/Python-3.7.11.tgz
+        dest: '{{ install_path }}.tgz'
+
+    # - name: Extract Python 3.7
+    #   unarchive:
+    #     src: '{{ install_path }}.tgz'
+    #     dest: '{{ install_path }}'
+    #   become: yes
+
+    - name: Extract & Install Python 3.7
+      shell: |
+        cd /tmp
+        tar xzf python3.7.tgz
+        cd Python-3.7.11
+        ./configure --enable-optimizations
+        make altinstall
+
+      become: yes
+  when: installed_python.rc != 0

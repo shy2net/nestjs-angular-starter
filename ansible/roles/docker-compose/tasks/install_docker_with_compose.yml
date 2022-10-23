@@ -1,0 +1,61 @@
+# Install docker and docker-compose
+---
+- name: Update yum
+  yum:
+    name: '*'
+    state: latest
+  become: yes
+
+- name: Install yum utils
+  yum:
+    name: yum-utils
+    state: latest
+  become: yes
+
+- name: Add docker repository
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docer-ce.repo
+  become: yes
+
+- name: Install docker
+  yum:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+  become: yes
+
+- name: Create docker group
+  group:
+    name: docker
+    state: present
+  become: yes
+
+- name: Add user to docker group
+  user:
+    name: centos
+    groups: docker
+    append: yes
+  become: yes
+
+- name: Start docker service
+  service:
+    name: docker
+    enabled: true
+    state: started
+  become: yes
+
+- name: Install docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+  become: yes
+
+- name: Enable execute on docker-compose
+  file:
+    path: /usr/local/bin/docker-compose
+    state: file
+    mode: a+x
+  become: yes
