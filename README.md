@@ -781,7 +781,7 @@ into the NodeJS src directory and delievers them in the `src/server.ts` like thi
 // Point static path to Angular 2 distribution
 this.express.use(express.static(path.join(__dirname, 'dist')));
 
-// Deliever the Angular 2 distribution
+// Deliver the Angular 2 distribution
 this.express.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
@@ -791,11 +791,15 @@ this.express.get('*', function(req, res) {
 
 When building your image for production it should contain the following commands:
 
-    npm run build # Call the build.sh script to start the build (it also installs the deps required if they do not exist)
+```bash
+npm run build # Call the build.sh script to start the build (it also installs the deps required if they do not exist)
+```
 
 And to run this code simple:
 
-    npm start
+```bash
+npm start
+```
 
 ### The build script (build.sh)
 
