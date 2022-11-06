@@ -59,3 +59,7 @@
     state: file
     mode: a+x
   become: yes
+
+- name: reset ssh connection to allow user changes to affect 'current login user'
+  ansible.builtin.meta:
+    reset_connection
