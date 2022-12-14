@@ -15,8 +15,12 @@
   become_user: deployment
 
 - name: Start app
+  vars:
+    ansible_python_interpreter: python3
   docker_compose:
     project_src: '{{ app_dir }}'
     state: present
   become: yes
   become_user: deployment
+  retries: 5
+  delay: 15
