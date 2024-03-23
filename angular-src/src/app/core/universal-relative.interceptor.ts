@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
+import { REQUEST } from '../../express.tokens';
 
 // case insensitive check against config and value
 const startsWithAny = (arr: string[] = []) => (value = '') => {

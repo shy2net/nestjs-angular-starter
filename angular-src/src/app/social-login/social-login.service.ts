@@ -1,5 +1,5 @@
 import {
-    AuthService as SocialAuthService, FacebookLoginProvider, GoogleLoginProvider, SocialUser
+    FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser
 } from 'angularx-social-login';
 import { Subject } from 'rxjs';
 
@@ -14,29 +14,29 @@ export class SocialLoginService {
 
   constructor(
     private socialAuthService: SocialAuthService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   signIn(provider: string): Promise<void> {
     return this.signInByProvider(provider)
-      .then((socialUser) => {
+      .then(socialUser => {
         if (socialUser) {
           const authToken = socialUser.authToken;
 
           // After the social login succeded, signout from the social service
           this.authService
             .socialLogin(provider, authToken)
-            .then((result) => {
+            .then(result => {
               this.socialAuthService.signOut().then(() => {
                 this.loginStateChanged.next(result);
               });
             })
-            .catch((error) => {
+            .catch(error => {
               this.loginStateChanged.error(error);
             });
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
         this.loginStateChanged.error(error);
       });

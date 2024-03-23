@@ -22,7 +22,7 @@ import { HeaderComponent } from './components/header/header.component';
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
-    CookieModule.forRoot(),
+    CookieModule.withOptions(),
     LoadingBarModule,
     ToastrModule.forRoot({
       timeOut: 5000,
