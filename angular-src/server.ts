@@ -1,21 +1,23 @@
 
 import 'zone.js/node';
 
+import * as express from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
-import * as express from 'express';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-import bootstrap from './src/main.server';
+
 import { REQUEST, RESPONSE } from './src/express.tokens';
+import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html'))
-    ? join(distFolder, 'index.original.html')
-    : join(distFolder, 'index.html');
+  const distFolder = path.join(process.cwd(), 'dist/browser');
+  const indexHtml = fs.existsSync(path.join(distFolder, 'index.original.html'))
+    ? path.join(distFolder, 'index.original.html')
+    : path.join(distFolder, 'index.html');
 
   const commonEngine = new CommonEngine();
 
