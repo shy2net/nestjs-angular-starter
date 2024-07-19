@@ -2,7 +2,7 @@
 ARG workdir=/app
 ARG NODE_ENV=development
 
-FROM node:14.20-alpine3.15 as base
+FROM node:20.15-alpine3.20 as base
 
 # Configure environment variables
 ENV NODE_ENV ${NODE_ENV}
@@ -18,7 +18,7 @@ WORKDIR /compile
 # Add bash support to alpine
 # Read this guide for more info: https://www.cyberciti.biz/faq/alpine-linux-install-bash-using-apk-command/
 RUN echo "NODE_ENV for build was set to: ${NODE_ENV}, starting build..." \
-    && apk add --no-cache bash python2 make gcc g++
+    && apk add --no-cache bash python3 make gcc g++ build-base python3-dev py3-setuptools
 
 # Copy package.json and package-lock.json files for node_modules installation
 # This allows caching take place
@@ -49,7 +49,7 @@ RUN npm run build \
     && cp ./package.json ${workdir} \
     # Remove source files, and delete bash
     && rm -Rf /compile \
-    && apk del bash --purge
+    && apk del bash build-base python3-dev py3-setuptools --purge
 
 # Create clean image for distribution
 FROM base
