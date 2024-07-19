@@ -2,7 +2,9 @@ import { CookieModule } from 'ngx-cookie';
 import { ToastrModule } from 'ngx-toastr';
 
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import {
+    HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch
+} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -44,6 +46,7 @@ import { HeaderComponent } from './components/header/header.component';
       multi: true,
     },
     RequestsService,
+    provideHttpClient(withFetch()),
   ],
   exports: [
     HeaderComponent,
