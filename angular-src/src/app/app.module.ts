@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { Route, RouterModule } from '@angular/router';
 import { AuthGuardService } from '@services';
 
@@ -60,10 +60,13 @@ const routes: Route[] = [
     CommonModule,
     SharedModule,
     CoreModule,
-    RouterModule.forRoot(routes, { enableTracing: false, initialNavigation: 'enabledBlocking' }),
+    RouterModule.forRoot(routes, {
+      enableTracing: false,
+      initialNavigation: 'enabledBlocking',
+    }),
     FormsModule,
   ],
-  providers: [],
+  providers: [provideClientHydration()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
