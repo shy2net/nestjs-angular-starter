@@ -6,8 +6,8 @@
     - [On Linux](#on-linux)
 - [Starting with this template](#starting-with-this-template)
 - [Template architecture](#template-architecture)
-  - [Angular 14](#angular-14)
-    - [Angular services & providers](#angular-services--providers)
+  - [Angular 17](#angular-17)
+    - [Angular services \& providers](#angular-services--providers)
     - [Angular components](#angular-components)
     - [Angular Universal (Server-Side-Rendering)](#angular-universal-server-side-rendering)
   - [NodeJS](#nodejs)
@@ -22,13 +22,13 @@
       - [Social Authentication](#social-authentication)
     - [Environment configurations](#environment-configurations)
       - [Use the configurations](#use-the-configurations)
-    - [Testing (Unit Tests\API Tests)](#testing-unit-testsapi-tests)
+    - [Testing (Unit Tests\\API Tests)](#testing-unit-testsapi-tests)
         - [Test database](#test-database)
         - [Running the tests](#running-the-tests)
   - [Sharing code (models, interfaces, etc)](#sharing-code-models-interfaces-etc)
   - [Form validations](#form-validations)
 - [Running on production](#running-on-production)
-  - [The easiest way to run on production - Docker\Docker-Compose](#the-easiest-way-to-run-on-production---dockerdocker-compose)
+  - [The easiest way to run on production - Docker\\Docker-Compose](#the-easiest-way-to-run-on-production---dockerdocker-compose)
     - [Docker-compose](#docker-compose)
     - [Nginx as reverse proxy](#nginx-as-reverse-proxy)
     - [Docker image build](#docker-image-build)
@@ -40,7 +40,7 @@
   - [Deploying our app on a new server using Ansible](#deploying-our-app-on-a-new-server-using-ansible)
     - [Configuring Ansible for the first time](#configuring-ansible-for-the-first-time)
     - [Deploying our infrastructure](#deploying-our-infrastructure)
-  - [Built in CI\CD (Github Actions)](#built-in-cicd-github-actions)
+  - [Built in CI\\CD (Github Actions)](#built-in-cicd-github-actions)
     - [Server preparations for CD to work](#server-preparations-for-cd-to-work)
     - [Secrets required for the CD process](#secrets-required-for-the-cd-process)
 
@@ -55,13 +55,13 @@
 
 # Introduction
 
-This starter template\boilerplate comes with NodeJS (typescript) and Angular 10. It shares models between Angular
-and NodeJS. Both of the NodeJS and and Angular 10 can run on the same webserver as the NodeJS exposes all of the
+This starter template\boilerplate comes with NodeJS (typescript) and Angular 17. It shares models between Angular
+and NodeJS. Both of the NodeJS and and Angular 17 can run on the same webserver as the NodeJS exposes all of the
 default routes to Angular and all of the known routes to the api.
 
 Technologies used in this template:
 
-- Angular 10 (with SSR) - including unit tests (based on Jasmine + Karma)
+- Angular 17 (with SSR) - including unit tests (based on Jasmine + Karma)
 - NodeJS express typescript (with SSL support) based on [NestJS](https://nestjs.com/) - for easier express setup using decorators
 - Mocha\Chai for backend testing + API tests
 - Environment based configurations
@@ -131,19 +131,19 @@ These list of commands will install, compile and run the output NodeJS.
 
 The template comes with a ready to go server and client integration, authentication and basic styling.
 
-## Angular 14
+## Angular 17
 
-Angular 14 comes with the following features:
+Angular 17 comes with the following features:
 
 - Bootstrap v4 with header and sticky footer.
 - Built in SSR bundled with the api server.
 - Built in toasty (ngx-toastr) which automatically pops up on HTTP errors obtained from the server API.
 - Built in ngx-loading-bar (Youtube styled) when moving between routes.
 - Built in auth-guard and authentication, saved on session cookie.
-- Built in social authentication (Google and Facebook).
+- Built in social authentication (Google and Facebook) - **Google and Facebook continually update their APIs, you might need to perform additional steps in order to make this template work with them**.
 - Build in form validations using class-validator (https://github.com/typestack/class-validator) implemented using the `FormValidatorDirective`.
 
-The code of Angular 10 is stored under the `angular-src` directory.
+The code of Angular 17 is stored under the `angular-src` directory.
 
 ### Angular services & providers
 
