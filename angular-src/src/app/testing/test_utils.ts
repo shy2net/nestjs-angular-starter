@@ -12,7 +12,7 @@ export function getCommonTestBed(
   declarations: unknown[],
   imports: unknown[] = [],
   providers: unknown[] = []
-): TestBedStatic {
+): TestBed {
   const testBed = TestBed.configureTestingModule({
     declarations: [...declarations],
     imports: [MockCoreModule, SharedModule, ...imports],

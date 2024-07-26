@@ -54,7 +54,17 @@ export class SocialAuthService {
   }
 
   private initFacebook(): void {
-    const facebookCredentials = this.config.socialAuthServices['facebook'];
+    const facebookCredentials =
+      this.config.socialAuthServices &&
+      this.config.socialAuthServices['facebook'];
+
+    if (!facebookCredentials) {
+      Logger.log(
+        `Facebook credentials are missing, skipping facebook authentication`,
+      );
+
+      return;
+    }
 
     passport.use(
       new FacebookTokenStrategy(
@@ -83,7 +93,17 @@ export class SocialAuthService {
   }
 
   private initGoogle(): void {
-    const googleCredentials = this.config.socialAuthServices['google'];
+    const googleCredentials =
+      this.config.socialAuthServices &&
+      this.config.socialAuthServices['google'];
+
+    if (!googleCredentials) {
+      Logger.log(
+        `Google auth credentials are missing, skipping google authentication`,
+      );
+
+      return;
+    }
 
     passport.use(
       new GoogleTokenStrategy(

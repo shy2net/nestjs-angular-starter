@@ -23,7 +23,7 @@ import { MockApiService } from './api.service.mock';
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
-    CookieModule.forRoot(),
+    CookieModule.withOptions(),
     LoadingBarModule,
     ToastrModule.forRoot({
       timeOut: 5000,
@@ -49,6 +49,12 @@ import { MockApiService } from './api.service.mock';
     },
     RequestsService,
   ],
-  exports: [HeaderComponent, FooterComponent, LoadingBarModule, ToastrModule, SocialLoginModule],
+  exports: [
+    HeaderComponent,
+    FooterComponent,
+    LoadingBarModule,
+    ToastrModule,
+    SocialLoginModule,
+  ],
 })
 export class MockCoreModule {}
